@@ -1,0 +1,179 @@
+%\DeclareLanguageMapping{english}{english-bibart}
+
+\DeclareFieldFormat[bibart]{name}{#1}
+\DeclareFieldFormat[bibart]{artist}{#1}
+
+\DeclareFieldFormat[bibart]{title}{\mkbibemph{#1}}
+
+\DeclareFieldFormat[bibart]{origtitle}{\mkbibemph{#1}}
+
+\DeclareFieldFormat[bibart]{year}{%
+  \ifcitation{\mkbibbold{#1}}{#1}}
+  
+\DeclareFieldFormat[bibart]{provenance}{%
+  #1}
+\DeclareFieldFormat[bibart]{city}{%
+  #1}
+\DeclareFieldFormat[bibart]{worktype}{%
+  #1}
+\DeclareFieldFormat[bibart]{medium}{%
+  #1}
+\DeclareFieldFormat[bibart]{dimensions}{%
+  #1}
+  \DeclareFieldFormat[bibart]{workstyle}{%
+  \ifcitation{\textsc{#1}}{#1}}
+
+
+\newbibmacro*{artist}{%
+  \printnames{artist}%
+  \setunit{\addcomma\addspace}%
+}
+  
+\newbibmacro*{artworkname}{%
+  \printfield{title}%
+  \setunit{\addcomma\addspace}%
+  \printfield{year}%
+  }
+
+\newbibmacro{provenance}{%
+%   \setunit{\addspace}%
+  \printfield{provenance}%
+  \addslash
+  \printfield{city}%
+  \setunit{\addcomma\addspace}
+}% end bibmacro
+
+\newbibmacro{medium}{%
+	\iffieldundef{workstyle}
+			{}
+			{\printfield{workstyle}}
+	  \printfield{worktype}
+	\addcolon\addspace
+  \printfield{medium}%
+ \setunit{\addcomma\addspace}%
+  \printfield{dimensions}%
+%  \setunit{\addcolon\addspace}
+}% end bibmacro
+
+
+%
+%\newbibmacro*{stackexchangeask}{%
+%  \bibstring{asked}%
+%  \setunit{\addspace}%
+%  \printaskdate%
+%  \iffieldundef{askedityear}%
+%    {}
+%    {\mkbibparens{\bibstring{edited}\setunit{\addspace}\printaskeditdate}}%
+%  \setunit{\addspace}%
+%  \bibstring{byauthor}%
+%  \setunit{\addspace}%
+%  \printnames{askp}%
+%  \setunit{\addspace}%
+%  \printfield{askpid}%
+%}
+%
+%\newbibmacro*{stackexchangeans}{%
+%  \bibstring{answered}%
+%  \setunit{\addspace}%
+%  \printansdate%
+%  \iffieldundef{ansedityear}
+%    {}
+%    {\mkbibparens{\bibstring{edited}\setunit{\addspace}\printanseditdate}}%
+%  \setunit{\addspace}%
+%  \bibstring{byauthor}%
+%  \setunit{\addspace}%
+%  \printnames{ansp}%
+%  \setunit{\addspace}%
+%  \printfield{anspid}%
+%}
+%
+%\newbibmacro*{stackexchangesite}{%
+%  \printfield{sitetopic}}
+
+
+%======================= bibart
+\DeclareCiteCommand{citeartist}%
+%@@@@@@@@@@@@@@@@ prenote
+{%
+	\usebibmacro{prenote}%
+}% 
+%@@@@@@@@@@@@@@@@ item
+{%
+\ifentrytype{bibart}%
+{%artist ==================================
+	\ifnameundef{artist}{}{\usebibmacro{artist}}%
+}{}%
+}%
+%@@@@@@@@@@@@@@@@ delim
+{}%
+%@@@@@@@@@@@@@@@@ postnote
+{%
+	\usebibmacro{postnote}% 
+}
+
+
+
+
+
+
+
+
+\DeclareBibliographyDriver{bibart}{%
+  \usebibmacro{artworkname}%
+  \setunit{\addcomma\addspace}%
+  \bibstring{artby}
+  \setunit{\addspace}%
+  \usebibmacro{artist}%
+  \setunit{\addspace  -- \addspace}%
+  \usebibmacro{medium}%
+ \setunit{\addcolon\addspace}%  
+  \usebibmacro{provenance}%
+%  \setunit{\adddot}%
+%%\newunit\newblock
+%%  \addspace
+%%   \setunit{\addspace}%
+%\addspace%
+%\mkbibparens{%
+%%\setunit{\addspace}%
+%%==============
+%\iffieldundef{distance}%
+%{}%do nothing
+%{%begin else
+%%\addspace%
+%\usebibmacro{distance}%
+%%\addsemicolon\addspace%
+%\newunit\newblock
+%}%end else
+%%==============
+% \iffieldundef{luminosity}%
+%   {}%do nothing
+%{%begin else
+%\usebibmacro{luminosity}%
+%}%end else
+%}%end parens
+%  \newunit\newblock
+%%  \usebibmacro{stackexchangeans}%
+%%  \newunit\newblock
+%%  \usebibmacro{stackexchangesite}%
+%%  \newunit\newblock
+  \usebibmacro{finentry}}
+
+
+\NewBibliographyString{artby}
+\DefineBibliographyStrings{english}{%
+    artby = {by},
+}
+
+
+\newcommand\bibtitleart{}
+\newcommand\bibtitleartdefault{Art}
+\renewcommand\bibtitleart{\bibtitleartdefault}
+
+
+
+\newcommand\printbibliographyart{%
+%\begin{refcontext}{rcbytitle}
+\printbibliography[type=bibart,
+title=\bibtitleart]
+%\end{refcontext}
+}

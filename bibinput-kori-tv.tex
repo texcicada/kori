@@ -1,0 +1,443 @@
+\DeclareSortingTemplate{bibtvsort}{%
+%\sort{
+%	\field{seriestitle}
+%	}
+\sort{
+	\field{episodetitle}
+	}
+\sort{
+	\field{title}
+	}
+\sort{
+	\field{seriesnumber}
+	}
+\sort{
+	\field{episodenumber}
+	} 
+}
+
+\DeclareSortingTemplate{bibtvsortse}{
+\sort{
+	\field{seriestitle}
+	}
+%\sort{
+%	\field{episodetitle}
+%	}
+%\sort{
+%	\field{title}
+%	}
+\sort{
+	\field{seriesnumber}
+	}
+\sort{
+	\field{episodenumber}
+	} 
+}
+
+
+
+
+\DeclareSortingTemplate{bibtvseries}{%
+\sort{
+	\field{seriestitle}
+	}
+\sort{
+	\field{title}
+	}
+}
+
+
+
+%%if you wanted to ignore “The” at the beginning of any title field:
+%\DeclareNosort{
+%\nosort{settitles}{\regexp{\AThe\s+}}
+%}
+
+\DeclareBiblistFilter{bibtvseries}{
+\filter[type=bibtvseries]
+%\filter[type=field,filter=seriestitle]
+%\filter[field]{seriestitle}
+}
+
+\DeclareBiblistFilter{bibtvepisode}{
+\filter[type=bibtvepisode]
+}
+
+
+
+
+
+\DeclareBiblistFilter{tvsnames}{
+\filter[type=bibtvseries]
+}
+
+\DeclareBibliographyDriver{tvsnames}{%
+\printfield{title}
+}
+
+
+
+
+
+\defbibfilter{tvseries}{%
+	type=bibtvseries,
+}
+
+
+%\AtBeginBibliography{hcodei}
+%\AtBeginBiblist{hbiblistnamei}{hcodei}
+%\AtEveryBibitem{xx}
+%
+
+\DeclareCiteCommand{\citeeptitle}[\mkbibquote]{}{\printfield{episodetitle}}{}{}
+
+\DeclareCiteCommand{\citeeptitleplain}{}{\printfield{episodetitle}}{}{}
+
+\DeclareCiteCommand{\citeeptitleref}{}{\mkbibquote{\printfield{episodetitle}}%
+\addspace%
+\mkbibparens{\printfield{titleabbrev}%
+\addspace%
+\printfield{seriesnumber}\adddot \printfield{episodenumber}%
+}%
+}{}{}
+
+\DeclareCiteCommand{\citeeptitlerefl}{}{\mkbibquote{\printfield{episodetitle}}%
+\addspace%
+\mkbibparens{\printfield{seriestitle}%
+\addspace%
+\printfield{seriesnumber}\adddot \printfield{episodenumber}%
+}%
+}{}{}
+
+
+
+%series title via episode reference
+\DeclareCiteCommand{\citestitleref}{}{\printfield{seriestitle}%
+\addspace%
+\mkbibparens{\printfield{numberepisodes}%
+\addspace\bibstring{numepisodes}%\adddot
+\addcomma\addspace%
+\printfield{year}%
+\iffieldundef{endyear}{}{%
+\bibrangedash\printfield{endyear}}%
+}% end parentheses
+}{}{}
+
+
+%series title via series reference
+\DeclareCiteCommand{\citesntitleref}{}{\printfield{title}%
+\addspace%
+\mkbibparens{\printfield{numberepisodes}%
+\addspace\bibstring{numepisodes}%\adddot%
+\addcomma\addspace%
+\printfield{year}%
+\iffieldundef{endyear}{}{%
+\bibrangedash\printfield{endyear}}%
+}% end parentheses
+}{}{}
+
+
+
+%episode short reference:
+\DeclareCiteCommand{\citeepsref}{}{\mkbibquote{\printfield{episodetitle}}%
+\addcomma\addspace%
+\printfield{titleabbrev}%
+~%
+\printfield{seriesnumber}%
+ \adddot%
+ \printfield{episodenumber}%
+ \addcomma\addspace%
+  \usebibmacro{episodewriter}
+  \addcomma\addspace%
+  \usebibmacro{episodedirector}
+% \adddot\addcomma%
+%
+%
+}{}{}
+
+
+
+%\DeclareLanguageMapping{english}{english-bibtvseries}
+
+\DeclareFieldFormat[bibtvseries]{producer}{#1}
+
+\DeclareFieldFormat[bibtvseries]{numberseasons}{#1}
+\DeclareFieldFormat[bibtvseries]{numberepisodes}{#1}
+\DeclareFieldFormat[bibtvseries]{episodelength}{#1}
+
+
+\DeclareFieldFormat[bibtvseries]{title}{\mkbibemph{#1}}
+
+\DeclareFieldFormat[bibtvepisode]{seriestitle}{\mkbibemph{#1}}
+
+\DeclareFieldFormat[bibtvseries]{year}{%
+  \mkbibbold{#1}}
+
+\DeclareFieldFormat[bibtvseries]{endyear}{%
+  \mkbibbold{#1}}
+  
+\newbibmacro*{seriesproducer}{%
+  \bibstring{producer}
+  \setunit\addspace
+  \printnames{producer}%
+  \setunit{\addcomma\addspace}%
+}
+
+
+
+\newbibmacro*{episodewriter}{%
+  \bibstring{writer}
+  \setunit\addspace
+  \printnames{writer}%
+  \setunit{\addcomma\addspace}%
+}
+
+
+\newbibmacro*{episodedirector}{%
+  \bibstring{director}
+  \setunit\addspace
+  \printnames{director}%
+  \setunit{\addcomma\addspace}%
+}
+
+
+
+
+  
+\newbibmacro*{seriesname}{%
+  \printfield{title}%
+  \addspace%
+%  \setunit{}%
+  \mkbibparens{%
+  \printfield{numberseasons}%
+  \bibstring{numseasons}%
+  \addcomma\addspace%
+\iffieldundef{numberepisodes}{}{%
+\printfield{numberepisodes}%
+\addspace\bibstring{numepisodes}\adddot
+\addspace
+\iffieldundef{episodelength}{}{%
+\bibstring{epby}
+\addspace\printfield{episodelength}\bibstring{episodelength}}%
+\addcomma\addspace}%
+  \printfield{year}%
+\iffieldundef{endyear}{}{%
+\bibrangedash\printfield{endyear}%
+  }% end parentheses
+}%
+  }
+
+
+
+\DeclareDataInheritance{bibtvseries}{bibtvepisode}{
+\inherit[override=true]{title}{seriestitle}
+}
+
+%\DeclareDataInheritance{bibtvepisode}{bibtvepisode}{
+%\inherit{episodetitle}{title}
+%}
+
+
+\newbibmacro*{seriestitle}{%
+  \mkbibemph{\printfield{seriestitle}}%
+}
+
+
+\newbibmacro*{episode}{%
+  \mkbibquote{\printfield{episodetitle}} %
+%  \setunit{\addspace}%
+  \mkbibparens{%
+%	   \usebibmacro{seriestitle}
+\mkbibbold{\printfield{seriestitle}}%
+%\printfield{seriestitle}%
+%\printfield{title}
+%  \usebibmacro{seriesname}%
+  \setunit{\addcomma\addspace}%
+%  \addspace%
+\bibstring{series}%
+  \addspace%
+  \printfield{seriesnumber}%
+  \setunit{\addcomma\addspace}%
+  \bibstring{episode}%
+  \addspace%
+  \printfield{episodenumber}}%
+  }
+
+  
+%\newbibmacro{provenance}{%
+%%   \setunit{\addspace}%
+%  \printfield{provenance}%
+%  \setunit{\addcomma\addspace}
+%  \printfield{city}%
+%  \setunit{\addcomma\addspace}
+%}% end bibmacro
+%
+%\newbibmacro{medium}{%
+%  \printfield{medium}%
+% \setunit{\addcomma\addspace}%
+%  \printfield{dimensions}%
+%%  \setunit{\addcolon\addspace}
+%}% end bibmacro
+
+
+%
+%\newbibmacro*{stackexchangeask}{%
+%  \bibstring{asked}%
+%  \setunit{\addspace}%
+%  \printaskdate%
+%  \iffieldundef{askedityear}%
+%    {}
+%    {\mkbibparens{\bibstring{edited}\setunit{\addspace}\printaskeditdate}}%
+%  \setunit{\addspace}%
+%  \bibstring{byauthor}%
+%  \setunit{\addspace}%
+%  \printnames{askp}%
+%  \setunit{\addspace}%
+%  \printfield{askpid}%
+%}
+%
+%\newbibmacro*{stackexchangeans}{%
+%  \bibstring{answered}%
+%  \setunit{\addspace}%
+%  \printansdate%
+%  \iffieldundef{ansedityear}
+%    {}
+%    {\mkbibparens{\bibstring{edited}\setunit{\addspace}\printanseditdate}}%
+%  \setunit{\addspace}%
+%  \bibstring{byauthor}%
+%  \setunit{\addspace}%
+%  \printnames{ansp}%
+%  \setunit{\addspace}%
+%  \printfield{anspid}%
+%}
+%
+%\newbibmacro*{stackexchangesite}{%
+%  \printfield{sitetopic}}
+
+\DeclareBibliographyDriver{bibtvseries}{%
+  \usebibmacro{seriesname}%
+  \setunit{\addcomma\addspace}%
+  \usebibmacro{seriesproducer}
+   \setunit{\adddot}%
+%%\newunit\newblock
+%%  \addspace
+%%   \setunit{\addspace}%
+%\addspace%
+%\mkbibparens{%
+%%\setunit{\addspace}%
+%%==============
+%\iffieldundef{distance}%
+%{}%do nothing
+%{%begin else
+%%\addspace%
+%\usebibmacro{distance}%
+%%\addsemicolon\addspace%
+%\newunit\newblock
+%}%end else
+%%==============
+% \iffieldundef{luminosity}%
+%   {}%do nothing
+%{%begin else
+%\usebibmacro{luminosity}%
+%}%end else
+%}%end parens
+%  \newunit\newblock
+%%  \usebibmacro{stackexchangeans}%
+%%  \newunit\newblock
+%%  \usebibmacro{stackexchangesite}%
+%%  \newunit\newblock
+  \usebibmacro{finentry}}
+
+
+
+
+
+
+
+\newenvironment{subbiblisttv}
+  {\begin{list}
+%      {\printfield[shorthandwidth]{shorthand}}%
+	{\printfield[shorthandwidth]{seriestitle}}%
+      {\setlength{\labelwidth}{\shorthandwidth}%
+      \setlength{\leftmargin}{\labelwidth}%
+      \setlength{\labelsep}{\biblabelsep}%
+      \addtolength{\leftmargin}{\labelsep}%
+      \setlength{\itemsep}{\bibitemsep}%
+      \setlength{\parsep}{\bibparsep}%
+      \renewcommand*{\makelabel}[1]{##1\hss}}}
+  {\end{list}}
+
+% seriesnumber = {1},
+%  episodenumber = {2},
+%  precis = {The one where Penny has an adventure},
+%  episodetitle
+
+\DeclareBibliographyDriver{bibtvepisode}{%
+%  \begin{subbiblisttv}
+%    \item
+    \usebibmacro{begentry}%
+\usebibmacro{episode}
+\ifnameundef{writer}{}{%
+	  \setunit{\addcomma\addspace}%
+  \usebibmacro{episodewriter}
+  }%ifnameundef
+\ifnameundef{director}{}{%
+   \setunit{\addcomma\addspace}%
+  \usebibmacro{episodedirector}
+   \setunit{\addcomma\adddot\addspace}%
+  }%ifnameundef
+%    \usebibmacro{seriesname}%
+  \usebibmacro{finentry}
+%    \end{subbiblisttv}%
+    }
+
+
+
+\DeclareRefcontext{rcbibtvseries}{sorting=bibtvseries}
+\DeclareRefcontext{rcbibtvsort}{sorting=bibtvsort} % episode by title
+\DeclareRefcontext{rcbibtvsortse}{sorting=bibtvsortse} % episode by series
+%\DeclareRefcontext{rcnyt}{sorting=nyt}
+%\DeclareRefcontext{rcnty}{sorting=nty}
+%
+%\DeclareRefcontext{rcbytitle}{sorting=bytitle}
+
+
+
+
+
+
+\newcommand\printbibliographytv{%
+\begin{refcontext}{rcbibtvseries}
+\printbibliography[
+	heading=subbibliography,%
+	type=bibtvseries,
+	title={TV Series}
+	]
+\end{refcontext}
+}
+
+%\newrefcontext[sorting=bibtvsort]
+\newcommand\printbibliographytveps{%
+\begin{refcontext}{rcbibtvsort}
+\printbibliography[
+	heading=subbibliography,%
+	type=bibtvepisode,
+	title={TV Episodes by episode title}
+	]
+\end{refcontext}
+}
+
+
+%\newrefcontext[sorting=bibtvsortse]
+\newcommand\printbibliographytvseq{%
+\begin{refcontext}{rcbibtvsortse}
+\printbibliography[
+	heading=subbibliography,%
+	type=bibtvepisode,
+	title={TV Episodes by series and sequence}
+	]
+\end{refcontext}
+}
+
+
+

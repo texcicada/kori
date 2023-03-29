@@ -1,0 +1,1802 @@
+% arara: xelatex
+% arara: biber
+% arara: xelatex
+% arara: xelatex
+
+
+
+%\RequirePackage{filecontents}
+
+
+
+%:::::::::::::::::::::::::::::::::::::::::::::
+\begin{filecontents}[overwrite]{bldm-kori.dbx}
+
+\DeclareDatamodelEntrytypes{photo}
+
+\DeclareDatamodelFields[type=field, datatype=literal]{%
+  photoname,
+}
+
+\DeclareDatamodelFields[type=list, datatype=name]{
+  photographer,
+}
+
+\DeclareDatamodelEntryfields[photo]{
+  photoname,
+  photographer,
+  }
+
+%\DeclareLanguageMapping{english}{english-photo}
+
+\newtoggle{koriphoto}
+\togglefalse{koriphoto}
+\newtoggle{koriarchive}
+\togglefalse{koriarchive}
+\newtoggle{koriart}
+\togglefalse{koriart}
+\newtoggle{koribiology}
+\togglefalse{koribiology}
+\newtoggle{koribookseries}
+\togglefalse{koribookseries}
+
+\newtoggle{korimagazines}
+\togglefalse{korimagazines}
+
+\newtoggle{koristamps}
+\togglefalse{koristamps}
+\newtoggle{korisyllabus}
+\togglefalse{korisyllabus}
+\newtoggle{koritv}
+\togglefalse{koritv}
+
+
+
+\newtoggle{koribiousedash}
+\toggletrue{koribiousedash}
+
+
+
+
+
+\ExplSyntaxOn
+
+\bool_new:N \g_kori_onphoto_bool
+\bool_new:N \g_kori_onarchive_bool
+\bool_new:N \g_kori_onart_bool
+\bool_new:N \g_kori_onbiology_bool
+\bool_new:N \g_kori_onbookseries_bool
+\bool_new:N \g_kori_onmagazines_bool
+
+\bool_new:N \g_kori_onstamps_bool
+\bool_new:N \g_kori_onsyllabus_bool
+\bool_new:N \g_kori_ontv_bool
+
+
+
+\bool_new:N \g_kori_onbiousedash_bool
+
+
+
+\keys_define:nn { korisettings }
+{
+
+	photo .bool_set:N = \g_kori_onphoto_bool,
+	photo .initial:n = { 	true }, % until `all' is set up
+	photo .default:n = { true }, % if only key name is given
+
+	archive .bool_set:N = \g_kori_onarchive_bool,
+	archive .initial:n = { 	false }, 
+	archive .default:n = { true }, % if only key name is given
+
+	art .bool_set:N = \g_kori_onart_bool,
+	art .initial:n = { 	false }, 
+	art .default:n = { true }, % if only key name is given
+
+	biology .bool_set:N = \g_kori_onbiology_bool,
+	biology .initial:n = { 	false }, 
+	biology .default:n = { true }, % if only key name is given
+
+	bookseries .bool_set:N = \g_kori_onbookseries_bool,
+	bookseries .initial:n = { 	false }, 
+	bookseries .default:n = { true }, % if only key name is given
+
+
+
+	magazines .bool_set:N = \g_kori_onmagazines_bool,
+	magazines .initial:n = { 	false }, 
+	magazines .default:n = { true }, % if only key name is given
+
+	stamps .bool_set:N = \g_kori_onstamps_bool,
+	stamps .initial:n = { 	false }, 
+	stamps .default:n = { true }, % if only key name is given
+
+	syllabus .bool_set:N = \g_kori_onsyllabus_bool,
+	syllabus .initial:n = { 	false }, 
+	syllabus .default:n = { true }, % if only key name is given
+
+	tv .bool_set:N = \g_kori_ontv_bool,
+	tv .initial:n = { 	false }, 
+	tv .default:n = { true }, % if only key name is given
+
+	biousedash .bool_set:N = \g_kori_onbiousedash_bool,
+	biousedash .initial:n = { 	true }, 
+	biousedash .default:n = { true }, % if only key name is given
+				
+
+}
+
+\NewDocumentCommand { \korisettings } { O{} } {
+		\keys_set:nn { korisettings } { #1 }
+		\bool_if:NT \g_kori_onphoto_bool
+			{
+				\toggletrue{koriphoto}
+			}
+		\bool_if:NT \g_kori_onarchive_bool
+			{
+				\toggletrue{koriarchive}
+			}
+		\bool_if:NT \g_kori_onart_bool
+			{
+				\toggletrue{koriart}
+			}
+		\bool_if:NT \g_kori_onbiology_bool
+			{
+				\toggletrue{koribiology}
+			}
+		\bool_if:NT \g_kori_onbookseries_bool
+			{
+				\toggletrue{koribookseries}
+			}
+
+
+
+		\bool_if:NT \g_kori_onmagazines_bool
+			{
+				\toggletrue{korimagazines}
+			}
+
+		\bool_if:NT \g_kori_onstamps_bool
+			{
+				\toggletrue{koristamps}
+			}
+		\bool_if:NT \g_kori_onsyllabus_bool
+			{
+				\toggletrue{korisyllabus}
+			}
+		\bool_if:NT \g_kori_ontv_bool
+			{
+				\toggletrue{koritv}
+			}
+
+
+		\togglefalse{koribiousedash}
+		\bool_if:NT \g_kori_onbiousedash_bool
+			{
+				\toggletrue{koribiousedash}
+			}
+
+
+
+
+		\input{bibinput-kori-main}
+
+}
+
+
+\ExplSyntaxOff
+
+
+\DeclareDatamodelEntrytypes{archive}
+
+\DeclareDatamodelFields[type=field, datatype=literal]{
+  level1,
+  level2,
+  level3,
+  level4,
+  level5,
+  level6,
+  level7,
+  level8,
+  level9,
+  level10,
+  level11,
+  level12,
+  shortarchive,
+  shortsyllabus,
+  itemattr1,
+  itemattr2,
+  itemattr3,
+  } 
+
+%======================================
+\DeclareDatamodelEntryfields[archive]{%
+  level1,
+  level2,
+  level3,
+  level4,
+  level5,
+  level6,
+  level7,
+  level8,
+  level9,
+  level10,
+  level11,
+  level12,
+  shortarchive,
+  itemattr1,
+  itemattr2,
+  itemattr3,
+  }
+
+
+
+
+
+\DeclareDatamodelEntrytypes{bibtvseries,bibtvepisode,bibart,
+bookset,
+booksetelement,
+%booksetr,
+%booksetelementr,
+bibstampseries,bibstamp,course,courseset,courseelement}
+\DeclareDatamodelFields[type=field, datatype=literal]{
+   %course
+   booktype,
+	%tv series
+  episodetitle,
+  seriestitle,
+  seriesnumber,
+  episodenumber,
+  title,
+  titleabbrev,
+%  year,
+  numberseasons,
+  numberepisodes,
+  episodelength,
+  %book
+    bdate,
+  longtitle,
+  longsubtitle,
+  %art
+  origtitle,
+  worktype,
+  workstyle,
+  %stamp series
+  country,
+  subjurisdiction,
+  denomination,
+  %stamp
+  stampcaption,
+  stampdenomination,
+  sortkeyref,
+} 
+\DeclareDatamodelFields[type=list, datatype=name]{
+  producer,
+  director,
+  writer,
+  artist,
+  illustration,
+}
+\DeclareDatamodelFields[type=field, datatype=date]{
+ date,
+ bdate, 
+}
+
+\DeclareDatamodelFields[type=field, datatype=verbatim]{
+  provenance,
+  city,
+  medium,
+  dimensions,
+  style,
+}
+
+%\DeclareDatamodelFields[type=field, datatype=verbatim]{
+%  provenance,
+%  city,
+%  medium,
+%  dimensions,
+%  style,
+%%  anspid,
+%%  ansid,
+%}
+\DeclareDatamodelEntryfields[bibtvseries]{
+  producer,
+  title,
+  titleabbrev,
+  date,
+  numberseasons,
+  numberepisodes,
+  episodelength,
+    }
+
+\DeclareDatamodelEntryfields[bibtvepisode]{
+  seriestitle,
+  writer,
+  director,
+  episodetitle,
+seriesnumber,
+episodenumber,
+    }
+
+
+
+
+%======================================
+%Book
+\DeclareDatamodelEntryfields[bookset]{%
+  bdate,
+}
+
+\DeclareDatamodelEntryfields[booksetelement]{%
+longtitle,
+longsubtitle,
+}
+
+%%Book
+%\DeclareDatamodelEntryfields[booksetr]{%
+%  bdate,
+%}
+%
+%\DeclareDatamodelEntryfields[booksetelementr]{%
+%longtitle,
+%longsubtitle,
+%}
+
+
+%======================================
+%Art
+
+
+%\DeclareDatamodelEntrytypes{bibart}
+%\DeclareDatamodelFields[type=field, datatype=literal]{
+%  title,
+%  origtitle,
+%  year,
+%}	
+%\DeclareDatamodelFields[type=list, datatype=name]{
+%  artist,
+%}
+%\DeclareDatamodelFields[type=field, datatype=date, skipout]{
+%	year,	
+%}
+
+%\DeclareDatamodelFields[type=field, datatype=verbatim]{
+%  provenance,
+%  city,
+%  medium,
+%  dimensions,
+%  style,
+%%  anspid,
+%%  ansid,
+%}
+\DeclareDatamodelEntryfields[bibart]{
+  artist,
+  title,
+  origtitle,
+  year,
+  provenance,
+  city,
+  medium,
+  dimensions,
+  style,
+  worktype,
+  workstyle,
+    }
+
+
+%======================================
+%Stamp
+\DeclareDatamodelEntryfields[bibstampseries]{
+  country,
+  subjurisdiction,
+  title,
+  date,
+  denomination,
+  illustration,
+    }
+\DeclareDatamodelEntryfields[bibstamp]{
+  stampdenomination,
+  stampcaption,
+  country,
+  subjurisdiction,
+  title,
+  date,
+  denomination,
+  illustration,
+  sortkeyref,
+    }
+
+
+
+
+\DeclareDatamodelEntrytypes{biology}
+
+
+
+\DeclareDatamodelFields[type=field, datatype=literal]{%
+	class,
+	order,
+	family,
+  genus,
+  species,
+  subspecies,
+}
+
+\DeclareDatamodelFields[type=list, datatype=name]{
+  commonname,
+  describer,
+  synonym,
+}
+
+
+\DeclareDatamodelEntryfields[biology]{
+	class,
+	order,
+	family,
+  genus,
+  apecies,
+  subspecies,
+  commonname,
+  describer,
+  synonym,
+  }
+
+
+
+\DeclareDatamodelEntrytypes{syllabus,production}
+
+
+
+
+
+\DeclareLanguageMapping{english}{english-kori} % .lbx file-
+
+
+\endinput
+\end{filecontents}
+%====================================
+
+
+
+
+
+
+
+
+
+%%%====================================
+%%\begin{filecontents}[overwrite]{kori-examples.bib}
+%%
+%%@photo{ph1,
+%%photoname={The Woods},
+%%photographer={M Woods},
+%%keywords={photo},
+%%}
+%%
+%%@photo{ph2,
+%%photoname={The Sky},
+%%photographer={A B Skier},
+%%keywords={photo},
+%%}
+%%@photo{ph3,
+%%photoname={The Air},
+%%photographer={O Ayre},
+%%keywords={photo},
+%%}
+%%@photo{ph4,
+%%photoname={The Lake},
+%%photographer={N Lakes},
+%%keywords={photo},
+%%}
+%%@photo{ph5,
+%%photoname={The Sea},
+%%photographer={R Seasons},
+%%keywords={photo},
+%%}
+%%
+%%@archive{folders45,
+%%   title={The Pieman Letters},
+%%   sorttitle={Pieman Letters},
+%%	level1 = {Museum of All Things},
+%%	level2 = {Historical Collections Department},
+%%	level3 = {Station Records 1790-1820},
+%%	level4 = {cat AB 123/486},
+%%	level5 = {box 2},
+%%	level6 = {folders 4-5},
+%%  related = {ffdoc1, ffdoc2, ffdoc3, ffdoc4, ffdoc12},
+%%  relatedtype = {archive},
+%%  keywords = {mv},
+%%}
+%%
+%%
+%%@archive{box2,
+%%   title={All About Pies},
+%%	level1 = {Museum of All Things},
+%%	level3 = {Station Records 1790-1820},
+%%	level4 = {cat AB 123/486},
+%%	level5 = {box 2},
+%%  related     = {box2a,box2b,box2c},
+%%  relatedtype = {archive},
+%%  keywords = {mv},
+%%}
+%%
+%%
+%%
+%%
+%%
+%%@archive{test1,
+%%	level1 = {Museum of All Things},
+%%	level2 = {Historical Collections Department},
+%%	level3 = {Station Records 1790-1820},
+%%	level4 = {cat AB 123/486},
+%%	level5 = {box 2},
+%%	level6 = {folders 4-5},
+%%	level7 = {document 12},
+%%  itemattr1 = {test1Letter},
+%%  itemattr2 = {from Simon to the Pieman},
+%%  itemattr3 = {15 February 1790},
+%%  shortarchive	={Pieman Letter},
+%%}
+%%
+%%
+%%	@archive{box2a,
+%%	level6 = {folders 1-2},
+%%  itemattr1 = {Correspondence in Frensshe},
+%%  xref = {box2},
+%%options = {dataonly},
+%%  keywords = {mv},
+%%  }
+%%
+%%
+%%@archive{box2b,
+%%	level6 = {folder 3},
+%%  itemattr1 = {Pastry recipes},
+%%  xref = {box2},
+%%options = {dataonly},
+%%  keywords = {mv},
+%%  }
+%%
+%%
+%%@archive{box2c,
+%%	level6 = {folders 4-5},
+%%  itemattr1 = {The Pieman Letters},
+%%  xref = {box2},
+%%options = {dataonly},
+%%  keywords = {mv},
+%%  }
+%%
+%%
+%%@archive{ffdoc4,
+%%	level7 = {\ldots},
+%%  itemattr1 = {: various other sundry letters},
+%%%  itemattr2 = {from Simon to the Pieman},
+%%%  itemattr3 = {15 February 1790},
+%%  xref = {folders45},
+%%%	options = {dataonly},
+%%  keywords = {mv},
+%%  }
+%%
+%%
+%%@archive{ffdoc12,
+%%	level7 = {document 12},
+%%  itemattr1 = {ffdoc12Letter},
+%%  itemattr2 = {from Simon to the Pieman},
+%%  itemattr3 = {15 February 1790},
+%%  xref = {folders45},
+%%%	options = {dataonly},
+%%  keywords = {mv},
+%%  }
+%%
+%%@archive{ffdoc1,
+%%	level7 = {document 1},
+%%  itemattr1 = {Letter},
+%%  itemattr2 = {from Simon to the Pieman},
+%%  itemattr3 = {12 February 1790},
+%%  xref = {folders45},
+%%options = {dataonly},
+%%  keywords = {mv},
+%%  }
+%%
+%%@archive{ffdoc2,
+%%	level7 = {document 2},
+%%  itemattr1 = {Letter},
+%%  itemattr2 = {from Simon to the Pieman},
+%%  itemattr3 = {14 February 1790},
+%%  xref = {folders45},
+%%options = {dataonly},
+%%  keywords = {mv},
+%%  }
+%%
+%%@archive{ffdoc3,
+%%	level7 = {document 3},
+%%  itemattr1 = {Letter},
+%%  itemattr2 = {from Simon to the Pieman},
+%%  itemattr3 = {15 March 1790},
+%%  xref = {folders45},
+%%	options = {dataonly},
+%%  keywords = {mv},
+%%  }
+%%  
+%%@book{abook,author={An Author},title={A Title},publisher={A Publisher},date={1795},location={Paris and London},}
+%%
+%%
+%%
+%%@bibart{art1,artist ={Leonardo {da Vinci}},title ={Mona Lisa},origtitle ={La Giaconda},date={1503~},provenance ={The Louvre},origprov ={Musée du Louvre},city ={Paris},medium ={oil on wood (Lombardy poplar)},dimensions ={77 x 53 cm},worktype ={painting},workstyle={Renaissance},}
+%%
+%%
+%%
+%%
+%%@biology{lion,
+%%	class = {Mammalia},
+%%	order = {Carnivora},
+%%	family = {Felid\ae},	
+%%	genus = {Felis},
+%%	species = {leo},
+%%	commonname = {lion},	
+%%  }
+%%
+%%@biology{cj,
+%%	class = {Insecta},
+%%	order = {Lepidoptera},
+%%	family = {Pierid\ae},	
+%%	genus = {Delias},
+%%	species = {nigrina},
+%%	commonname = {Black Jezebel and Common Jezebel},	
+%%  }  
+%%
+%%
+%%@biology{pl,
+%%	class = {Insecta},
+%%	order = {Lepidoptera},
+%%	family = {Nymphalid\ae},	
+%%	genus = {Vanessa},
+%%	species = {cardui},
+%%	commonname = {Painted Lady},	
+%%  }  
+%%
+%%
+%%
+%%\end{filecontents}
+%%
+%%%--------------------------------
+
+
+
+
+
+
+
+
+\documentclass{article}
+\usepackage{xparse}
+
+\usepackage[table]{xcolor}
+\pagecolor{green!3}
+\usepackage{fontspec}
+\setmainfont{Noto Serif}
+\usepackage{graphicx}
+\usepackage{tikz}
+%\usepackage{luacolor}
+
+%\usepackage[british]{babel}
+%\usepackage{csquotes}
+\usepackage[style=british]{csquotes}
+
+
+\usepackage[%
+	style=ext-authortitle-ibid, 
+	datamodel=bldm-kori,
+	minxrefs=1,
+	locallabelwidth=true,
+	citecounter=true,
+	citetracker=true,	
+		]{biblatex}
+
+
+\addbibresource{biblatex-examples.bib}
+\addbibresource{kori-examples.bib}
+
+%\toggletrue{koriphoto}
+%\input{bibinput-kori-main}
+\korisettings[photo,
+archive,
+art,
+biology,
+bookseries,
+magazines,
+stamps,
+syllabus,
+tv,
+biousedash=false,
+]
+
+
+
+\newcommand{\cmm}[1]{{\large\ttfamily\color{blue}\textbackslash#1}}
+
+\newcommand{\cmmp}[1]{\cmm{#1}\par\medskip}
+
+\newcommand{\cmmq}[2]{{\large\ttfamily\color{blue}\textbackslash#1} = \csname #1\endcsname{#2}}
+
+\newcommand{\cmmr}[2]{\textcolor{\cmmhlcolour}{\cmmq{#1}{#2}}}
+
+
+\newcommand{\cmmhlcolour}{red}
+
+\newcommand{\cmmhl}[1]{{\color{\cmmhlcolour}#1}}
+
+
+\newcommand\showcmnd[1]{%
+\textbackslash\texttt{#1}%
+}
+
+\newcommand\showcmnda[1]{%
+@\texttt{#1}%
+}
+
+\newcommand\cmma[1]{\showcmnda{#1}}
+\newcommand\ddivider{\noindent{\color{blue!80}\rule{\textwidth}{7pt}}}
+
+\begin{document}
+%==================================================
+\section{Introduction}
+Several datamodels for use with Biblatex, for citing and referencing specialist material: comparative literature (book series and TV series), archives, artwork, biological species, photo credits listings, stamps, and magazines as units of interest.
+
+The datamodel is made available with the \\
+\verb|datamodel=bldm-kori,| \\
+Biblatex option, and the citation commands and bibliography drivers are activated via options in a settings command:
+
+\begin{verbatim}
+\korisettings[photo,
+archive,
+art,
+biology,
+bookseries,
+magazines,
+stamps,
+syllabus,
+tv,
+biousedash=false,%if missing scientific name
+]
+\end{verbatim}
+
+
+
+
+
+%==================================================
+\section{Photo}
+
+Intended for credits listings.
+
+Examples of some plain cites for comparion: 
+\cite{kastenholz} 
+and
+\cite{vangennep}.
+
+\medskip
+\cmm{photocite}
+
+Some photo cites: air: \photocite{ph3}, sky: \photocite{ph2}, and sea: \photocite{ph5}. 
+
+
+%*****************************************************
+\paragraph{bib}
+
+entrytype: \cmma{photo}
+
+literal field: photoname,
+
+name list: photographer,
+
+\ddivider
+
+
+
+%==================================================
+\section{Archive}
+
+Twelve levels of hierarchical free-form text, for referring to archival material of any arrangment.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\cmm{archive}
+
+\medskip
+(A) Big Endian:
+ 
+\togglefalse{littleendian}
+
+\noindent First cite: \archive{test1}
+
+Second cite: \archive{test1}
+
+\medskip
+(B) Little Endian:
+\toggletrue{littleendian}
+
+\citetrackerfalse
+\noindent First cite: \archive{test1}
+
+\citetrackertrue
+Second cite: \archive{test1}
+
+%%%%% reverse direction: bottom up
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bigskip
+\cmm{archiverev}
+
+\medskip
+(C) Big Endian: Reverse
+ 
+\togglefalse{littleendian}
+
+\citetrackerfalse
+\noindent First cite: \archiverev{test1}
+
+\citetrackertrue
+Second cite: \archiverev{test1}
+
+\medskip
+(D) Little Endian: Reverse
+\toggletrue{littleendian}
+
+\citetrackerfalse
+\noindent First cite: \archiverev{test1}
+
+\citetrackertrue
+Second cite: \archiverev{test1}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bigskip
+\cmm{archiveitem}
+
+\medskip
+\archiveitem{test1}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bigskip
+\cmm{archiveloc}
+
+\medskip
+\archiveloc{test1}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bigskip
+\cmm{archivelocrev}
+
+\medskip
+\archivelocrev{test1}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bigskip
+\cmm{parenarchive}
+
+\medskip
+\citetrackerfalse
+\parenarchive{test1}
+
+\citetrackertrue
+Second cite: \parenarchive{test1}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bigskip
+\cmm{bracketarchive}
+
+\medskip
+\citetrackerfalse
+\bracketarchive{test1}
+
+\citetrackertrue
+Second cite: \bracketarchive{test1}
+
+\medskip
+\bracketarchive[See][leaf 4]{test1}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bigskip
+\cmm{footarchive}
+
+\medskip
+text\footarchive{test1}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bigskip
+\cmm{archivea} = \archivea{test1}
+
+\cmm{archiveb} = \archiveb{test1}
+
+\cmm{archivec} = \archivec{test1}
+
+\cmm{archived} = \archived{test1}
+
+\cmm{archivee} = \archivee{test1}
+
+\cmm{archivef} = \archivef{test1}
+
+\cmm{archiveg} = \archiveg{test1}
+
+\cmm{archiveh} = \archiveh{test1}
+
+\cmm{archivei} = \archivei{test1}
+
+\cmm{archivej} = \archivej{test1}
+
+\cmm{archivek} = \archivek{test1}
+
+\cmm{archivel} = \archivel{test1}
+
+---
+
+Box 2 (\verb|\archive{box2}|): \par\archive{box2}.
+
+\medskip
+One of the items in box 2 (\verb|\archive{box2a}| + \verb|\citetitle{box2}|): \par\archive{box2a} in the \citetitle{box2} archive.
+
+\medskip
+Folders4-5 (\verb|\archive{folders45}|): \par\archive{folders45}.
+
+\medskip
+A document (\verb|\archive{ffdoc2}| + \verb|\citetitle{folders45}|), items marked in \cmmhlcolour: \par
+\cmmhl{\archive{ffdoc2}}, 
+in the 
+\cmmhl{\citetitle{folders45}}
+collection.
+
+
+
+%*****************************************************
+\paragraph{bib}
+
+entrytype: \cmma{archive}
+
+literal field: level1,
+  level2,
+  level3,
+  level4,
+  level5,
+  level6,
+  level7,
+  level8,
+  level9,
+  level10,
+  level11,
+  level12,
+  shortarchive,
+  shortsyllabus,
+  itemattr1,
+  itemattr2,
+  itemattr3,
+
+
+\ddivider
+
+
+
+
+
+
+
+%==================================================
+\section{Art}
+Intended as the caption to an illustration: Title, date, artist, school/style, type, medium, dimensions, location -- \\{\color{blue}\fullcite{art1}}.
+
+Uses \showcmnd{fullcite}; there is no custom artcite command.
+
+\cmmq{citeartist}{art1}
+
+\cmmq{citetitle}{art1}
+
+\cmmq{citeyear}{art1}
+
+text\cmmq{footcite}{art1}
+\subsection{@bibart}
+\begin{center}
+\begin{tabular}{c|p{0.28\textwidth}|p{0.52\textwidth}|}
+\hline
+1 & \showcmnd{@bibart} entry &
+\texttt{
+@bibart\{art1,\newline
+artist = \{Leonardo \{da Vinci\}\},\newline
+title = \{Mona Lisa\},\newline
+origtitle = \{La Giaconda\},\newline
+date = \{1503\textasciitilde\},\newline
+provenance = \{The Louvre\},\newline
+origprov = \{Musée du Louvre\},\newline
+city = \{Paris\},\newline
+medium = \{oil on wood (Lombardy poplar)\},\newline
+dimensions = \{77 x 53 cm\},\newline
+worktype = \{painting\},\newline
+workstyle = \{Renaissance\},\newline
+\}\newline
+}%end texttt
+\\
+2 & No customised citation driver defined \newline & -- \\
+3 & \showcmnd{citetitle\{art1\}}
+ & {\color{blue}\citetitle{art1}}\newline
+ \\
+4 & \showcmnd{cite\{art1\}}
+ & {\color{blue}\cite{art1}}\newline
+ \\
+5 & \showcmnd{fullcite\{art1\}} uses the bibliography driver
+ & {\color{blue}\fullcite{art1}}\newline
+ \\
+  \hline
+\end{tabular}
+\end{center}
+
+
+%*****************************************************
+\paragraph{bib}
+
+entrytype: \cmma{bibart}
+
+literal field: title, origtitle,
+  worktype,
+  workstyle,
+
+
+name list: producer,
+  director,
+  writer,
+  artist,
+  illustration,
+  
+  date field: date,
+ bdate,
+ 
+ verbatim field: provenance,
+  city,
+  medium,
+  dimensions,
+  style,
+
+
+\ddivider
+ 
+
+%==================================================
+\section{Biology}
+
+\cmmp{biology}
+First cite: \biology{lion}; second cite: \biology{lion}. \biology{cj}, the \biocommon{cj}, ... (using \cmm{biocommon})
+
+\medskip
+\cmmp{biocommon}
+The 	
+\biocommon{pl} 
+butterfly (\citetrackerfalse\biology{pl}\citetrackertrue) ...
+
+\cmmq{bioclass}{pl}
+
+\cmmq{bioorder}{pl}
+
+\cmmq{biofamily}{pl}
+
+\cmmq{biogenus}{pl}
+
+\cmmq{biospecies}{pl}
+
+\cmmq{biocommon}{pl}
+
+\cmmq{biogenspec}{pl}
+
+\medskip
+\cmmq{biocommona}{cj}
+
+\cmmq{biocommonb}{cj}
+
+\cmmq{biocommonc}{cj}
+
+\medskip
+The \biocommon{osw} and \biocommon{btp} are frequent visitors~...
+
+%\biology{biotest}
+
+\biology{wisteria}
+
+
+
+%*****************************************************
+\paragraph{bib}
+
+entrytype: 	@biology
+
+literal field:
+	class,
+	order,
+	family,
+  genus,
+  species,
+  subspecies,
+
+
+name list:
+  commonname,
+  describer,
+  synonym,
+
+\ddivider
+
+
+\tikzstyle{every picture}+=[remember picture]
+\tikzstyle{na}=[
+	shape=rectangle,
+	inner sep=0pt,
+	text depth=0pt
+]
+
+
+
+
+
+
+%==================================================
+\section{Books}
+Medium neutral citation of layered assemblages, 
+%beginning with creative works, 
+by title and natural subunits (if any), such as chapters and episodes: more generally, anything in a set/element relationship. 
+%The set is usually called a series, and the members of the set could be anything (stories, paintings, stamps), 
+Biblatex's cross-referencing function allows inheritance across these layers.\subsection{Book Sets}
+\subsubsection{\cmm{bcite}}
+Use \cmm{bcite} to cite a specific book in a series: {\color{blue}\bcite[\nopp c4]{bsm52}} and {\color{blue}\bcite[\nopp c5]{bsm49}}.
+
+
+Also use \cmm{bcite} to cite from a specific book in an author's (collected) works, like Bronte's {\color{blue}\bcite{bsm76}}; or multiple works from the same or different authors: {\color{blue}\bcite{bsm125, bsm131, bsm70}}. Second cite: {\color{blue}\bcite[\nopp~c14]{bsm131}}.
+
+%Smollett \bcite{bsm147}
+%\bcite{bsm150}
+%\bcite{bsm149}
+%\bcite{bsm152}
+
+\subsubsection{@bookset and @booksetelement}
+\begin{center}
+\begin{tabular}{c|p{0.32\textwidth}|p{0.52\textwidth}|}
+\hline
+\rule{0pt}{0.5ex} 1 & a @bookset entry containing author details (name and date) & \texttt{@bookset\{% 
+\tikz\node[na](ref1){blyton,};\newline
+Author = \{Enid Blyton\},\newline
+date = \{1897/1968\},\newline\}\newline
+} \\
+2 & a @bookset entry containing series details (for the bib: series name, crossref, sortkey and  keywords) & \texttt{@bookset\{\tikz\node[na](ref3){malorytowers,};\newline 
+Title = \{Malory Towers\},\newline 
+crossref = \{\tikz\node[na](ref2){blyton\},};\newline 
+sortkey = \{Malory Towers\},\newline 
+keywords = \{series, school\},\newline 
+\}\newline 
+} \\
+3 & a @booksetelement entry containing the book details (for the citation: title and shorthand introduction, or shorthand; for the bib: date, sortkey, keywords and xref) & \texttt{@booksetelement\{bsm16,\newline 
+Title = \{Second Form at Malory Towers\},\newline 
+Date = \{1947\},\newline 
+Series = \{Malory Towers\},\newline 
+Number = \{2\},\newline 
+xref = \{\tikz\node[na](ref4){malorytowers\},};\newline 
+sortkey = \{Malory Towers02\},\newline 
+shorthand = \{EB--MT2\},\newline 
+keywords = \{series\},\newline 
+\}\newline }
+ \\
+$\to$ & Result: \newline \textbackslash bcite[\textbackslash nopp~c3]\{bsm16\} & {\color{blue}\bcite[\nopp c3]{bsm16}} \\
+\hline
+\end{tabular}
+\end{center}
+\begin{tikzpicture}[overlay]
+	\path[->,red,thick] (ref2) edge [out=0,in=0] (ref1);
+	\path[->,brown,thick] (ref4) edge [out=0,in=0] (ref3);
+\end{tikzpicture}
+%node[sloped,anchor=north]
+
+%\subsubsection{Other cite commands}
+%\citetitle{bsm16}, %title only
+%\citeauthor{bsm16},%empty
+%\citeauthor{blyton},%last name: item prints in bib
+%\cite{bsm16},%shorthand 
+
+\subsubsection{What \cmm{bcite} does}
+On first cite, \cmm{bcite} prints the book title and the shorthand introduction; on subsequent cites, it prints the shorthand.
+
+\cmm{bcite} handles multi-cites: {\color{blue}\bcite{bsm29, bsm30}}.
+
+The \cmm{fullcite} for a \cmma{booksetelement} looks like this:\\{\color{blue}\fullcite{bsm16}}
+
+Series
+
+
+First cite:
+
+\cmm{cite} and \cmm{bseriescite}: 
+
+\bseriescite{lyonesse} 
+
+\bseriescite{chroniclesofnarnia}
+\nocite{bsm27,bsm28	,bsm31,bsm32,bsm22}
+
+\medskip
+Subsequent cite:
+
+\cmm{cite}: \cite{lyonesse} 
+
+and \cmm{bseriescite}: 
+\bseriescite{lyonesse} 
+
+\cmm{cite}: \cite{chroniclesofnarnia},
+
+and \cmm{bseriescite}: \bseriescite{chroniclesofnarnia}
+
+
+\medskip
+\cmm{citetitle}: \citetitle{lyonesse}, and \citetitle{chroniclesofnarnia}.
+
+
+%*****************************************************
+\paragraph{bib}
+
+entrytype: \cmma{bookset}
+
+
+date field: bdate
+
+\medskip
+entrytype: \cmma{booksetelement}
+
+literal field:  longtitle,
+  longsubtitle,
+
+
+\ddivider
+
+
+
+
+
+
+
+%==================================================
+\section{Stamps}
+\subsection{\cmm{stampcite} and \cmm{stampcitec}}
+Postage stamps also form sets and elements, and individual stamps are cited by caption and denomination, using the \cmm{stampcite} custom command: like the jewel-like 
+\cmmr{stampcite}{stamp2}. 
+And one from the 
+\cmmr{citetitle}{stmpseries2}\footnote{The series itself is cited via \showcmnd{citetitle\{stmpseries2\}}} series: 
+\cmmr{stampcite}{stamp7}, with its honey-eater bird, an Eastern Spinebill. And a single stamp
+ from \citetrackerfalse
+ \cmmr{stampcitec}{stamp10}:
+ \citetrackertrue
+\cmmr{stampcite}{stamp10}.
+Repeated cite: a painted lady butterfly is also visible in the garden 
+\cmmr{stampcite}{stamp7}.
+
+\subsection{@bibstampseries and @bibstamp}
+\begin{center}
+\begin{tabular}{c|p{0.28\textwidth}|p{0.52\textwidth}|}
+\hline
+ 1 & \showcmnd{stampcite\{stamp1\}}
+ & {\color{blue}\stampcite{stamp1}}\newline
+ \\
+2 & The \showcmnd{@bibstampseries} series entry in the bib file&
+ \texttt{@bibstampseries\{\tikz\node[na](ref5) {stmpseries1,};\newline
+ country = \{Australia\},\newline
+ title = \{Native Bees\},\newline
+ date = \{2019-05-14\},\newline
+ denomination = \{4 x \$1\},\newline
+ illustration = \{Kevin Stead\},\newline
+ sortkey = \{Native Bees\},\newline
+ keywords = \{stampseries\},\newline
+ \}} \newline \\
+3 & The \showcmnd{@bibstamp} stamp entry in the bib file &
+\texttt{@bibstamp\{stamp1, \newline
+stampdenomination = \{\$1\}, \newline
+xref = \{\tikz\node[na](ref6) {stmpseries1\},}; \newline
+stampcaption = \{Resin Bee (\textbackslash mkbibemph\{Megachile macleayu\})\}, \newline
+sortkey = \{Native Bees01\}, \newline
+sortkeyref = \{Native Bees\}, \newline
+keywords = \{stampseries\}, \newline
+shorthand = \{Aus--NB1\}, \newline
+\}} \newline
+\\
+4 & Referring to a country (stored in \showcmnd{sortkeyref}) for series-less stamps: \newline
+\showcmnd{citetrackerfalse}
+ \showcmnd{stampcitec\{stamp10\}}
+ \showcmnd{citetrackertrue}  & 
+\citetrackerfalse
+ \stampcitec{stamp10}
+ \citetrackertrue \newline \\
+\hline
+\end{tabular}
+\end{center}
+\begin{tikzpicture}[overlay]
+	\path[->,red,thick] (ref6) edge [out=0,in=0] (ref5);
+\end{tikzpicture}
+
+
+
+
+%*****************************************************
+\paragraph{bib}
+
+entrytype: \cmma{bibstampseries}
+
+literal field: country,
+  subjurisdiction,
+  denomination,
+
+
+name list: artist,
+  illustration,
+  
+\medskip
+entrytype: \cmma{bibstamp}
+
+literal field: stampcaption,
+  stampdenomination,
+  sortkeyref,
+
+
+name list: artist,
+  illustration,
+  
+\ddivider
+
+
+
+
+
+%==================================================
+\section{Syllabus}
+\syllabus{kontiki} is about building a balsa-wood raft on the Inca side of the Pacific Ocean and  then drifting off into the sunset.
+
+\syllabus[See][2]{kontiki}.
+
+\nocite{esdrama}
+\nocite{esnovels}
+\nocite{esnonfiction}
+
+
+%*****************************************************
+\paragraph{bib}
+
+entrytype: \cmma{syllabus}
+
+Uses the same fields as \cmma{archive}.
+
+\ddivider
+
+
+
+
+%==================================================
+\section{TV}
+Episodes on TV also form sets.
+
+Use \showcmnd{citesntitleref} to refer to a TV series -- like {\color{blue}\citesntitleref{lis}}, and that other one {\color{blue}\citesntitleref{b5}}.
+
+\subsection{Citing TV Episodes}
+Episode titles, like {\color{blue}\citeeptitlerefl{iat19}} and {\color{blue}\citeeptitlerefl{gi37}}, come in several citation flavours.
+
+\begin{center}
+\begin{tabular}{c|p{0.35\textwidth}|p{0.42\textwidth}|}
+\hline
+1 & \showcmnd{citeeptitle\{gi11\}} episode title &\citeeptitle{gi11} \newline\newline\\
+2 & \showcmnd{citeeptitleplain\{gi11\}} episode title plain &\citeeptitleplain{gi11} \newline\newline\\
+3 & \showcmnd{citeeptitleref\{gi11\}} episode title ref &\citeeptitleref{gi11} \newline\newline\\
+4 & \showcmnd{citeeptitlerefl\{gi11\}} episode title ref long &\citeeptitlerefl{gi11} \newline\\
+5 & \showcmnd{citestitleref\{gi11\}} series title via citing episode &\citestitleref{gi11} \newline\newline\\
+6 & \showcmnd{citesntitleref\{gi\}} series title via citing series &\citesntitleref{gi} \newline\newline\\
+7 & \showcmnd{citeepsref\{gi11\}} episode short reference &\citeepsref{gi11} \newline\\
+\hline
+\end{tabular}
+\end{center}
+
+
+\subsubsection{@bibtvseries and @bibtvepisode}
+TV series and episode bib entries follow a similar pattern to the book sets.
+
+\begin{center}
+\begin{tabular}{c|p{0.25\textwidth}|p{0.62\textwidth}|}
+\hline
+1 & @bibtvseries &
+\texttt{ 
+@bibtvseries\{lis,\newline
+title=\{Lost in Space\},\newline
+titleabbrev=\{LiS\},\newline
+date=\{1965/1968\},\newline
+numberseasons=\{3\},\newline
+numberepisodes=\{83\},\newline
+episodelength=\{40\},\newline
+genre=\{science fiction\},\newline
+genreb=\{space adventure\},\newline
+setting=\{outer space\},\newline
+timeperiod=\{1999\},\newline
+producer=\{Irwin Allen\},\newline
+premise=\{space family explorers lost in space\},\newline
+like=\{Swiss Family Robinson in space\},\newline
+keywords=\{tv series\},\newline
+\} \newline
+} \\
+2 & @bibtvepisode &
+\texttt{@bibtvepisode\{lis1,\newline
+episodetitle =\{The Reluctant Stowaway\},\newline
+episodecount =\{1\},\newline
+seriesnumber =\{1\},\newline
+episodenumber =\{1\},\newline
+director =\{Anton M L
+eader\},\newline
+writer =\{S Bar-David\},\newline
+crossref =\{lis\},\newline
+keywords=\{tv series\},\newline
+\}\newline} \\
+$\to$ & \showcmnd{citeepsref\{lis1\}} & {\color{blue}\citeepsref{lis1}} \\
+\hline
+\end{tabular}
+\end{center}
+
+The series abbreviation, \texttt{LiS}, is inherited by \showcmnda{bibtvepisode} from \showcmnda{bibtvseries}'s \texttt{titleabbrev} field via the \texttt{crossref}erence.
+
+
+
+%*****************************************************
+\paragraph{bib}
+
+entrytype: \cmma{bibtvseries}
+
+literal field: title,
+  titleabbrev,
+  numberseasons,
+  numberepisodes,
+  episodelength,
+
+
+name list: producer,
+
+\medskip
+entrytype: \cmma{bibtvepisode}
+
+
+literal field: episodetitle,
+  seriestitle,
+  seriesnumber,
+  episodenumber,
+
+
+name list: director,
+  writer,
+
+\ddivider
+
+
+
+
+%==================================================
+\section{Magazines}
+\showcmnda{periodical}
+and
+\showcmnda{article}
+entrytypes can be
+\texttt{related}.
+
+In 
+\cmmr{citetitle}{fokmv},
+%\supercite{fokmv}
+\cmmr{citeauthor}{fokmv} 
+take us to ...
+
+\nocite{ba}
+\cmmr{cite}{treasure}
+
+\nocite{gsm}
+
+
+
+\newcommand\examplekey{amamv}
+\newcommand\docite[2]{{\sffamily\bfseries#1}: text\textcolor{red}{\csname #1\endcsname{#2}} text}
+\newcommand\dociteexample[1]{\docite{#1}{\examplekey}}
+
+
+
+
+\dociteexample{cite}
+
+\dociteexample{parencite}
+
+\dociteexample{footcite}
+
+\dociteexample{footcitetext}
+
+\dociteexample{textcite}
+
+\dociteexample{supercite}
+
+\dociteexample{citeauthor}
+
+\dociteexample{citeauthor*}: \citeauthor*{\examplekey}
+
+\dociteexample{citetitle} in \citetitle{cwammv}
+
+\dociteexample{citetitle*}: \citetitle*{\examplekey}.
+
+\dociteexample{citeyear}
+
+\dociteexample{fullcite}
+
+\dociteexample{footfullcite}
+
+
+\ddivider
+
+
+
+
+
+
+\newpage
+
+%bcite x: \bcite{smollett}
+
+
+%cite r: \cite{smollettr}
+
+%%%bcite r: \bcite{smollettr}
+%%%
+%%%\bcite{bsm155r}
+
+\subparagraph{Sundry matters}
+Use \cmm{nocite} to list items in the bibliography without citing them in the body of the document. 
+
+Another photo, on a different page: \photocite{ph4}
+
+\nocite{bsm142,
+bsm143,
+bsm144,
+bsm145,
+bsm146,
+bsm147,
+bsm148,
+bsm149,
+bsm150,
+bsm151,
+bsm152,
+bsm153,
+bsm154,
+bsm155,
+bsm156,
+bsm157,
+}
+
+Use
+\cmm{renewcommand}\cmm{setitemmarker}\{...\}
+to change the magazine article item marker, currently set to
+\cmm{itemmarkerdefault} (\verb|\textcolor{blue}{O}| = \itemmarkerdefault).
+Likewise renew 
+\cmm{setitemmarkercb}
+for the background parameter, currently set to
+\verb|\colorbox{blue!20}|.
+
+Use 
+\cmm{renewcommand}\{\cmm{bibtitlephoto}\}\{...\} 
+to change the heading of the photo bibliography; and similarly for the others: 
+archive, art.
+
+Identify the bibliographies with:
+
+\rowcolors{1}{blue!12}{blue!4}
+\begin{tabular}{ll}
+Art
+&
+type=bibart 
+\\
+Biology
+&
+type=biology
+\\
+Photos
+& 
+type=photo,
+\\
+Archives
+& 
+type=archive,
+\\
+Book series
+& 
+keyword=series,
+\\
+Collected works
+& 
+keyword=works,
+\\
+Syllabus
+& 
+type=syllabus,
+\\
+TV series
+& 
+type=bibtvseries,
+\\
+TV episodes
+& 
+type=bibtvepisode,
+\\
+Stamp series
+& 
+type=bibstampseries,
+\\
+Stamps
+& 
+type=bibstamp,
+\\
+Magazines
+& 
+keyword=mv,
+\\
+\end{tabular}
+
+
+\ddivider
+
+
+
+
+
+%%%%\newcounter{mmx}
+%%%
+%%%\newenvironment{testlist}%
+%%%  {\begin{list}
+%%%      {\fcolorbox{red}{blue!5}{xxx}}%
+%%%%      {\fcolorbox{red}{blue!5}{\themmx}}%
+%%%%		{{\themmx}}%			
+%%%      {%
+%%%%      \usecounter{mmx}%
+%%%%      \setlength{\topsep}{4ex}%
+%%%      \setlength{\labelwidth}{2em}%
+%%%      \setlength{\leftmargin}{\labelwidth}%
+%%%      \setlength{\labelsep}{1em}%
+%%%      \addtolength{\leftmargin}{\labelsep}%
+%%%      \setlength{\itemsep}{0ex}%
+%%%      \setlength{\parsep}{0ex}%
+%%%      \renewcommand*{\makelabel}[1]{##1\hss}%
+%%%}%
+%%%}
+%%%  {\end{list}}
+%%%
+%%%\begin{testlist}
+%%%\item ttt
+%%%\item yyy
+%%%\begin{testlist}
+%%%\item ttt
+%%%\item yyy
+%%%\item uuu
+%%%\begin{testlist}
+%%%\item ttt
+%%%\item yyy
+%%%\item uuu
+%%%\item iii
+%%%\begin{testlist}
+%%%\item ttt
+%%%\item yyy
+%%%\item uuu
+%%%\begin{testlist}
+%%%\item abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+%%%\end{testlist}
+%%%\item iii
+%%%\end{testlist}
+%%%\end{testlist}
+%%%\item iii
+%%%\end{testlist}
+%%%\item uuu
+%%%\item iii
+%%%\end{testlist}
+%%%
+%%%
+%%%\noindent{\color{blue!80}\rule{\textwidth}{7pt}}
+%%%\textcolor{green}{qwertyuiop}
+
+%\noindent\rule{16in}{7pt}
+
+%\rule{\textwidth}{\textheight}
+
+%\mvcite{smollettr}
+
+%%%\begin{refcontext}{rcbytitle}
+%%%\printbibliography[nottype=periodical,
+%%%title=XXX,
+%%%keyword=mv,
+%%%heading=subbibliography]
+%%%\end{refcontext}+++
+
+
+%\archive{zbox2,zbox2a,zbox2c,zbox2b,zbox2a1} 
+
+
+%==================================================
+\newpage
+\section{Refs}
+
+\printbibliography[prenote=abibnote,
+nottype=photo,
+nottype=archive,
+nottype=bibart,
+nottype=biology,
+notkeyword=series,
+notkeyword=works,
+nottype=syllabus,
+	nottype=bibtvseries,
+	nottype=bibtvepisode,
+	nottype=bibstampseries,
+	nottype=bibstamp,
+	notkeyword=mv,
+]
+
+
+
+\printbibliographyphoto
+
+\printbibliographyarchive
+
+\printbibliographyart
+
+\printbibliographybiology
+
+\printbibliographybookseries
+
+\printbibliographyworks
+
+\printbibliographystamps
+
+
+\printbibliographysyllabus
+
+	
+	
+\printbibliographytv
+											
+\printbibliographytveps
+
+\printbibliographytvseq	
+
+
+\printbibliographymagazines
+
+
+
+
+\begin{center}
+\textemdash
+\textemdash
+\end{center}
+%
+%\newpage
+%/bl/
+%
+%braces
+%
+%bl_RTL_lua_dir_test  dir
+%
+%bl_multilingual_lua
+%
+%bl_bibenv5
+%
+%bibinfoboc
+%
+%multidates_demo2
+
+
+
+
+\end{document}

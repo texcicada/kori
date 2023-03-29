@@ -1,0 +1,176 @@
+\DeclareSortingTemplate{sortstampset}{
+%\sort{
+%	\field{seriestitle}
+%	}
+\sort{
+	\field{country}
+	}
+\sort{
+	\field{sortkey}
+	}
+}
+
+
+\DeclareFieldFormat[bibstampseries]{country}{%
+\textsc{#1}%
+}
+
+\DeclareFieldFormat[bibstampseries]{title}{%
+\mkbibemph{#1}%
+}
+
+\DeclareFieldFormat[bibstampseries]{denomination}{%
+\textsc{#1}%
+}
+
+
+\DeclareNameFormat[bibstampseries]{illustration}{%
+	\bibstring{illustrator}\adddot\addspace 
+    \usebibmacro{name:given-family}
+      {\textsc{\namepartfamily}}
+      {\namepartgiven}
+      {\namepartprefix}
+      {\namepartsuffix}%
+}
+	
+
+\DeclareFieldFormat[bibstamp]{country}{%
+\textsc{#1}%
+}
+
+\DeclareFieldFormat[bibstamp]{stampdenomination}{%
+\textsc{#1}%
+}
+\DeclareFieldFormat[bibstamp]{stampcaption}{%
+\mkbibquote{#1}%
+}	
+
+
+
+
+
+\DeclareBibliographyDriver{bibstampseries}{%
+  \usebibmacro{begentry}%
+   	\ifkeyword{stampseries}{%
+   	\large\printfield{title}%
+   	\addspace\mkbibbrackets{%
+		\iffieldundef{denomination}{nd}{\printfield{denomination}}%
+		\iffieldundef{country}{nc}{\addcomma\addspace\printfield{country}}%
+   	\iffieldundef{year}{}{\addcomma\addspace{\small\printfield{year}}}%if date
+		}%end brackets
+		\ifnameundef{illustration}{}{\addcomma\addspace\printnames{illustration}}%
+%   	\printfield{bdate} xxx \printfield{year}
+}{%else not stampseries:
+ {zzz\large\printfield{title}}%
+  	}%if
+  \usebibmacro{finentry}}
+
+
+
+\newenvironment{subbibstmplist}
+  {\begin{list}
+      {\printfield[shorthandwidth]{shorthand}}%
+      {\setlength{\labelwidth}{\shorthandwidth}%
+      \setlength{\leftmargin}{\labelwidth}%
+      \setlength{\labelsep}{\biblabelsep}%
+      \addtolength{\leftmargin}{\labelsep}%
+      \setlength{\itemsep}{\bibitemsep}%
+      \setlength{\parsep}{\bibparsep}%
+      \renewcommand*{\makelabel}[1]{##1\hss}}}
+  {\end{list}}
+
+\makeatletter
+\DeclareBibliographyDriver{bibstamp}{%
+%  \usebibmacro{bibindex}%
+  % from https://tex.stackexchange.com/a/463414/105447
+  % don't issue \leavevmode inside here
+  \let\blx@leavevmode\relax
+  % get rid of the \leavevmode from the beginning of the entry
+  % this avoids an empty line before the enumerate
+  \vspace{-\dimexpr\baselineskip+\itemsep\relax}%
+  \begin{subbibstmplist}
+    \item
+    \usebibmacro{begentry}%
+    \printfield{stampcaption}%
+	 \iffieldundef{stampdenomination}{}{\addcomma\addspace\printfield{stampdenomination}}%
+%    \iffieldundef{longtitle}{}{%
+%    \addspace\mkbibparens{%
+%    \bibstring{fulltitle}\addcolon\addspace
+%	\mkbibemph{%
+%    \printfield{longtitle}
+%        \iffieldundef{longsubtitle}{}{%
+%	    \addcolon\addspace
+%	    \printfield{longsubtitle}
+%	    }%if
+%	    }%emph
+%    }%parens
+%    }%if
+%   \addspace\mkbibbrackets{\printfield{year}}
+%    \addspace\mkbibparens{\printfield{date}}
+    \usebibmacro{related}
+%  \iftoggle{bbx:related}
+%    {\usebibmacro{related:init}%
+%     \usebibmacro{related}}
+%    {not related}%if
+    \usebibmacro{finentry}%
+  \end{subbibstmplist}%
+}
+\makeatother
+
+
+\DeclareCiteCommand{\stampcite}
+{   % prenote
+    \usebibmacro{prenote}%
+}
+{%loopcode
+%    \printnames{author}%
+%    \marginpar{
+%        \printnames{author}, 
+%        \printfield{year}.
+\ifciteseen
+{\mkbibparens{\printfield{shorthand}\usebibmacro{postnote}}}%
+{\printfield{stampcaption}%
+\iffieldundef{stampdenomination}{}{\addcomma\addspace\printfield{stampdenomination}}%
+\iffieldundef{country}{}{\addcomma\addspace\printfield{country}}% 
+\usebibmacro{shorthandintro}\usebibmacro{postnote}}%
+%    }
+}
+{   %sepcode
+    \multicitedelim%
+}
+{%postnote
+}
+
+
+%================================
+%standalone stamp cite: country
+\DeclareCiteCommand{\stampcitec}
+{   % prenote
+    \usebibmacro{prenote}%
+}
+{%loopcode
+{\iffieldundef{sortkeyref}{Unspecified country}{\printfield{sortkeyref}}}%
+}
+{   %sepcode
+    \multicitedelim%
+}
+{%postnote
+    \usebibmacro{postnote}%
+}
+
+
+
+
+
+
+
+
+\newcommand\printbibliographystamps{%
+%\begin{refcontext}{rcbibtvsortse}
+\printbibliography[
+	keyword=stampseries,
+	heading=subbibliography,
+	title={Postage Stamps},
+	]
+%\end{refcontext}
+}

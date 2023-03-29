@@ -1,0 +1,250 @@
+\DeclareSortingTemplate{sortbksns}{
+%\sort{
+%	\field{seriestitle}
+%	}
+\sort{
+	\field{author}
+	}
+\sort{
+	\field{sortkey}
+	}
+}
+
+
+\DeclareNameFormat[bookset]{author}{%
+%\textsc{#1}%
+	\ifbibliography
+	{%
+    \usebibmacro{name:family-given}
+      {\textsc{\namepartfamily}}
+      {\namepartgiven}
+      {\namepartprefix}
+      {\namepartsuffix}%
+      }%
+      {%
+    \usebibmacro{name:given-family}
+      {\textsc{\namepartfamily}}
+      {\namepartgiven}
+      {\namepartprefix}
+      {\namepartsuffix}%      
+      }%
+}
+
+
+\DeclareBibliographyDriver{bookset}{%
+	\setcounter{icount}{0}
+  \usebibmacro{begentry}%
+   	\ifkeyword{works}{%
+   	\printnames{author}%
+%   	\printfield{bdate} xxx \printfield{year}
+   	\iffieldundef{year}{}{%
+   	\small%
+   		\addspace\mkbibparens{\printfield{year}%
+\bibdaterangesep\printfield{endyear}}%
+   	}%if
+}{%else not works:
+ {\large\printfield{title}}%
+ \ifnameundef{author}{xx}{%
+  	\addspace
+  	\biblstring{jourser}
+  	}%if
+ 	\addspace
+  		\bibstring{byauthor}
+  	\printnames{author}%
+  	}%if
+  \usebibmacro{finentry}}
+
+
+
+\newenvironment{subbiblist}%
+  {\begin{list}
+      {\printfield[shorthandwidth]{shorthand}}%
+      {%
+      \setlength{\bibitemsep}{0ex}%
+      \setlength{\bibparsep}{0ex}%
+      \setlength{\labelwidth}{\shorthandwidth}%
+      \setlength{\leftmargin}{\labelwidth}%
+      \setlength{\labelsep}{\biblabelsep}%
+      \addtolength{\leftmargin}{\labelsep}%
+      \setlength{\itemsep}{\bibitemsep}%
+      \setlength{\parsep}{\bibparsep}%
+      \renewcommand*{\makelabel}[1]{##1\hss}}}
+  {\end{list}}
+
+\newcounter{icount}
+\def\ifequaldospace#1#2{\ifnum#1=#2\relax \vspace{0.72ex}\fi}
+\makeatletter
+\DeclareBibliographyDriver{booksetelement}{%
+%  \usebibmacro{bibindex}%
+  % from https://tex.stackexchange.com/a/463414/105447
+  % don't issue \leavevmode inside here
+  \let\blx@leavevmode\relax
+  % get rid of the \leavevmode from the beginning of the entry
+  % this avoids an empty line before the enumerate
+  \vspace{-\dimexpr\baselineskip+\itemsep\relax}%
+%  \vspace{0.5ex}
+%  \setcounter{icount}{0}
+  \begin{subbiblist}%
+  \stepcounter{icount}
+  \vspace{-\dimexpr0.72\baselineskip\relax}%
+  	\ifequaldospace{\value{icount}}{1}
+      \item %\theicount%
+    \usebibmacro{begentry}%
+    \printfield{title}%
+    \iffieldundef{longtitle}{}{%
+    \addspace\mkbibparens{%
+    \bibstring{fulltitle}\addcolon\addspace%
+	\mkbibemph{%
+    \printfield{longtitle}%
+        \iffieldundef{longsubtitle}{}{%
+	    \addcolon\addspace%
+	    \printfield{longsubtitle}%
+	    }%if
+	    }%emph
+    }%parens
+    }%if
+%   \addspace\mkbibbrackets{\printfield{year}}
+    \addspace\mkbibparens{\printfield{year}}%
+    \usebibmacro{related:init}\usebibmacro{related}%
+%%%%%\iftoggle{bbx:related}{%
+%%%%%\setunit*{\addperiod}\printtext{\enspace}
+%%%%%\newline\usebibmacro{related:init}\usebibmacro{related}%
+%%%%%  }%
+%%%%%  {}%
+%  \iftoggle{bbx:related}
+%    {\usebibmacro{related:init}%
+%     \usebibmacro{related}}
+%    {not related}%if
+    \usebibmacro{finentry}%
+  \end{subbiblist}%
+}
+\makeatother
+
+
+\DeclareCiteCommand{\bcite}
+{   % prenote
+    \usebibmacro{prenote}%
+}
+{%loopcode
+%    \printnames{author}%
+%    \marginpar{
+%        \printnames{author}, 
+%        \printfield{year}.
+\ifciteseen
+{\mkbibparens{\printfield{shorthand}\usebibmacro{postnote}}}%
+{\printfield{title} \usebibmacro{shorthandintro}\usebibmacro{postnote}}%
+%    }
+}
+{   %sepcode
+    \multicitedelim%
+}
+{%postnote
+}
+
+
+
+
+\DeclareCiteCommand{\bseriescite}
+{   % prenote
+    \usebibmacro{prenote}%
+}
+{%loopcode
+\ifciteseen
+{\printfield{title}}%
+{\cite{\thefield{entrykey}}}%
+}
+{   %sepcode
+    \multicitedelim%
+}
+{%postnote
+\usebibmacro{postnote}%
+}
+
+
+\newcommand\printbibliographybookseries{%
+%\begin{refcontext}{rcphotosort}
+\printbibliography[
+	keyword=series,
+	heading=subbibliography,
+	title={Book Series},
+	]
+%\end{refcontext}
+}
+	
+\newcommand\printbibliographyworks{%
+%\begin{refcontext}{rcphotosort}
+\printbibliography[
+	keyword=works,
+	heading=subbibliography,
+	title={Collected Works},
+	]
+%\end{refcontext}
+}
+
+
+
+%%==================================================
+%\DeclareBibliographyDriver{booksetr}{%
+%  \usebibmacro{begentry}%
+%   	\ifkeyword{works}{%
+%   	\printnames{author}%
+%%   	\printfield{bdate} xxx \printfield{year}
+%   	\iffieldundef{year}{}{%
+%   	\small%
+%   		\addspace\mkbibparens{\printfield{year}%
+%\bibdaterangesep\printfield{endyear}}%
+%   	}%if
+%}{%else not works:
+% {\large\printfield{title}}%
+% \ifnameundef{author}{xx}{%
+%  	\addspace
+%  	\biblstring{jourser}
+%  	}%if
+% 	\addspace
+%  		\bibstring{byauthor}
+%  	\printnames{author}%
+%  	}%if
+%  \usebibmacro{finentry}}
+%
+%
+%\makeatletter
+%\DeclareBibliographyDriver{booksetelementr}{%
+%%  \usebibmacro{bibindex}%
+%  % from https://tex.stackexchange.com/a/463414/105447
+%  % don't issue \leavevmode inside here
+%  \let\blx@leavevmode\relax
+%  % get rid of the \leavevmode from the beginning of the entry
+%  % this avoids an empty line before the enumerate
+%  \vspace{-\dimexpr\baselineskip+\itemsep\relax}%
+%  \begin{subbiblist}
+%    \item
+%    \usebibmacro{begentry}%
+%    \printfield{title}%
+%    \iffieldundef{longtitle}{}{%
+%    \addspace\mkbibparens{%
+%    \bibstring{fulltitle}\addcolon\addspace
+%	\mkbibemph{%
+%    \printfield{longtitle}
+%        \iffieldundef{longsubtitle}{}{%
+%	    \addcolon\addspace
+%	    \printfield{longsubtitle}
+%	    }%if
+%	    }%emph
+%    }%parens
+%    }%if
+%%   \addspace\mkbibbrackets{\printfield{year}}
+%    \addspace\mkbibparens{\printfield{year}}
+%%    \usebibmacro{related}}
+%\iftoggle{bbx:related}{%
+%\setunit*{\addperiod}\printtext{\enspace}
+%\newline\usebibmacro{related:init}\usebibmacro{related}%
+%  }%
+%  {}%
+%%  \iftoggle{bbx:related}
+%%    {\usebibmacro{related:init}%
+%%     \usebibmacro{related}}
+%%    {not related}%if
+%    \usebibmacro{finentry}%
+%  \end{subbiblist}%
+%}
+%\makeatother

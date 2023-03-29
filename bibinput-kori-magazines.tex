@@ -1,0 +1,353 @@
+
+%\defbibentryset{cwamset}{cwam,ama}
+
+\newcommand\itemmarkerdefault{\textcolor{blue}{O}}
+\newcommand\setitemmarker{\itemmarkerdefault}
+\newcommand\setitemmarkercb{\colorbox{blue!20}}
+
+
+\makeatletter
+\newcommand*{\begrelateddelimmultivolumeset}{\newunitpunct\par\nobreak}
+\newbibmacro*{related:multivolumeset}[1]{%
+  \entrydata*{#1}{%
+    \ifboolexpr{%====================================
+      test {\ifentrytype{book}}
+    }
+    {%
+  		\printfield[bibentrysetcount]{entrysetcount}%
+  		}
+  		{%
+%    \printtext{\colorbox{blue!20}{\printfield[bibentrysetcount]{entrysetcount}}}%%%
+    \printtext{\setitemmarkercb{\setitemmarker}}%%%
+        }
+    \blx@anchor % this is to get the link right, everything else is
+                % a straightforward extension of related:multivolume
+    \setunit{\addspace}%
+    \ifboolexpr{%====================================
+      test {\ifentrytype{book}}
+    }
+    {
+    \printtext{%
+      \printfield{volume}%
+      \printfield{part}}%
+    \setunit*{\addcolon\space}%
+		\usebibmacro{title}%
+		}
+		{
+		\addspace%%%
+		--%%%
+    \textcolor{blue}{\usebibmacro{title}}%%%
+    }
+    \ifboolexpr{
+      test {\ifnamesequal{author}{savedauthor}}
+      or
+      test {\ifnameundef{author}}
+    }
+      {}
+      {\usebibmacro{bytypestrg}{author}{author}%
+       \setunit{\addspace}%
+       \printnames[byauthor]{author}
+       \newunit\newblock}%
+    \ifboolexpr{
+      test {\ifnamesequal{editor}{savededitor}}
+      or
+      test {\ifnameundef{editor}}
+    }
+      {}
+      {\usebibmacro{byeditor+others}%
+       \newunit\newblock}%
+    \ifboolexpr{
+      test {\iflistsequal{location}{savedlocation}}
+      or
+      test {\iflistundef{location}}
+    }
+      {}
+      {\printlist{location}}%<- typo
+    \ifboolexpr{
+      test {\iflistsequal{publisher}{savedpublisher}}
+      or
+      test {\iflistundef{publisher}}
+    }
+      {\setunit*{\addcomma\space}}
+      {\setunit*{\addcolon\space}%
+       \printlist{publisher}%
+       \setunit*{\addcomma\space}}%
+    \ifboolexpr{%====================================
+      test {\ifentrytype{book}}
+    }
+    {
+  \printdate%
+		}
+		{
+		\printfield{pages}%%%
+		}
+  \newunit\newblock
+  \ifboolexpr{
+    test {\iffieldsequal{isbn}{savedisbn}}
+    or
+    not togl {bbx:isbn}
+  }
+    {}
+    {\printfield{isbn}}}}
+
+% {<entrykey>}
+% get the hash-keys of all related 'children'
+\newcommand*{\blx@fakeset@gethashkey}[1]{%
+  \listcsxadd{blx@fakeset@hashkeys@toprocess@\the\c@refsection}{%
+    \detokenize{#1}}%
+  % save fakeset parent of hash-key
+  \csxdef{blx@fakeset@setp@\the\c@refsection @#1}{\strfield{entrykey}}%
+  \ifcsundef{blx@fakeset@plist@\the\c@refsection}
+    {\global\cslet{blx@fakeset@plist@\the\c@refsection}\@empty}
+    {}%
+  \xifinlistcs{\strfield{entrykey}}{blx@fakeset@plist@\the\c@refsection}
+    {}
+    {\listcsxadd{blx@fakeset@plist@\the\c@refsection}{\strfield{entrykey}}}%
+  \advance\blx@tempcnta\@ne
+  \csxdef{blx@fakeset@seti@\the\c@refsection @#1}{\the\blx@tempcnta}%
+}
+
+% {<cmd>}{<csv field>}
+% execute <cmd> for each item in the csv field
+% there should be a way to avoid the \def here ...
+\newrobustcmd*{\blx@fakeset@forcsvfield}[2]{%
+  \def\blx@fakeset@forcsvfield@handler{#1}
+  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
+  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
+  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
+  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
+  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
+  \expandafter
+  \forcsvlist
+  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
+  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
+  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
+  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
+  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
+  \expandafter
+  \blx@fakeset@forcsvfield@handler
+  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
+  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
+  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
+  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
+  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
+  \expandafter
+  {\thefield{#2}}}
+
+\AtDataInput{%
+  \blx@tempcnta\z@
+  \iffieldequalstr{relatedtype}{multivolumeset}
+    {\iffieldundef{related}
+       {}
+       {\blx@fakeset@forcsvfield{\blx@fakeset@gethashkey}{related}}}
+    {}%
+  % sorted list of *all* entries in the .bbl including cloned entries
+  \listcsxadd{blx@fakeset@dlist@aentry@\the\c@refsection
+    @\blx@dlist@name}{\strfield{entrykey}}%
+}
+
+% resolve hash-key to bib-key and other usable stuff
+% {<hash-key>}
+\newcommand*{\blx@fakeset@resolvekeys}[1]{%
+  % get the entrykey from the bib, not the cloned hash
+  \entrydata{#1}{\xdef\blx@fakeset@temp@bibkey{\strfield{clonesourcekey}}}%
+  % map hash-key to bib-key
+  \csxdef{blx@fakeset@bibkey@\the\c@refsection @#1}{\blx@fakeset@temp@bibkey}%
+  % map fakeset parent to list of its children
+  \ifcsundef{blx@fakeset@setc@\the\c@refsection @%
+             \csuse{blx@fakeset@setp@\the\c@refsection @#1}}
+    {\global\cslet{blx@fakeset@setc@\the\c@refsection
+                   @\csuse{blx@fakeset@setp@\the\c@refsection @#1}}
+       \@empty
+     \blx@tempcnta\z@}
+    {}%
+  \advance\blx@tempcnta\@ne
+  \listcsxadd{blx@fakeset@setc@\the\c@refsection
+              @\csuse{blx@fakeset@setp@\the\c@refsection @#1}}
+    {\blx@fakeset@temp@bibkey}%
+  % map bib-key to fakeset parent
+  \csxdef{blx@setc@\the\c@refsection @\blx@fakeset@temp@bibkey}{%
+    \csuse{blx@fakeset@setp@\the\c@refsection @#1}}%
+  % copy data from hash-key to bib-key
+  \global\csletcs{blx@data@\the\c@refsection @\blx@refcontext@context
+                  @\blx@fakeset@temp@bibkey}%
+    {blx@data@\the\c@refsection @\blx@refcontext@context @#1}%
+  % fakeset count
+  \iftoggle{blx@sortsets}
+    {\csnumgdef{blx@fakeset@seti@\the\c@refsection @#1}{\blx@tempcnta}}
+    {}%
+  \global\csletcs{blx@seti@\the\c@refsection @\blx@fakeset@temp@bibkey}
+    {blx@fakeset@seti@\the\c@refsection @#1}%
+  \global\csletcs{blx@seti@\the\c@refsection @#1}
+    {blx@fakeset@seti@\the\c@refsection @#1}%
+}
+
+\newcommand*{\blxfset@addrealkey}[2]{%
+  \listgadd{#1}{#2}%
+  \ifcsundef{blx@fakeset@setc@\the\c@refsection @#2}
+    {}
+    {\forlistcsloop{\listadd{#1}}{blx@fakeset@setc@\the\c@refsection @#2}}}
+
+% {<list_1>}{<list_2>}{<item>}
+% worker macro to sort:
+% add <item> to <list_2> if it exists in <list_1>
+\newcommand*{\blx@fakeset@sortbycsinto@i}[3]{%
+  \xifinlist{\detokenize{#3}}{#1}
+    {\listeadd{#2}{\detokenize{#3}}}
+    {}}
+
+% {<list_1>}{<cs list_2>}{<list_3>}
+% sorts all entries in <list_2> in the order given by <cs list_2> into <list_3>
+\newcommand*{\blx@fakeset@sortbycsinto}[3]{%
+  \forlistcsloop{\blx@fakeset@sortbycsinto@i{#1}{#3}}{#2}}
+
+\newcommand*{\blx@fakeset@csvstrtolist@i}[2]{%
+  \listeadd{#1}{\detokenize{#2}}}
+
+\newcommand*{\blx@fakeset@listtocsvstr@i}[2]{%
+  \appto{#1}{#2,}}
+
+\newcommand*{\blx@fakeset@listtocsvstr}[2]{%
+  \forlistloop{\blx@fakeset@listtocsvstr@i{#1}}{#2}}
+
+\newcommand*{\blx@fakeset@sortrelatedfield}[1]{%
+  \begingroup
+  \blx@getdata{#1}%
+  \let\blx@fakeset@tempa\@empty
+  \let\blx@fakeset@tempb\@empty
+  \blx@fakeset@forcsvfield
+    {\blx@fakeset@csvstrtolist@i{\blx@fakeset@tempa}}
+    {related}%
+  \blx@fakeset@sortbycsinto
+    {\blx@fakeset@tempa}
+    {blx@fakeset@dlist@aentry@\the\c@refsection @\blx@refcontext@context}
+    {\blx@fakeset@tempb}
+  \let\blx@fakeset@tempa\@empty
+  \blx@fakeset@listtocsvstr{\blx@fakeset@tempa}{\blx@fakeset@tempb}%
+  \blx@bbl@addentryfield{#1}{\the\c@refsection}{related}%
+    {\blx@refcontext@context}{\blx@fakeset@tempa}%
+  \endgroup
+}
+
+% we can only resolve our fakeset entries once all entries have been read
+\preto{\blx@bbl@endrefsection}{%
+  \letcs\blx@fakeset@tempa{blx@fakeset@hashkeys@toprocess@\the\c@refsection}%
+  \ifundef\blx@fakeset@tempa
+    {\let\blx@fakeset@tempa\@empty}
+    {}%
+  \iftoggle{blx@sortsets}
+    {\letcs\blx@fakeset@tempb{blx@fakeset@dlist@aentry@\the\c@refsection
+       @\blx@refcontext@context}%
+     \blx@filtercitesort\blx@fakeset@tempb{blx@fakeset@tempa}%
+     \let\blx@fakeset@tempa\blx@fakeset@tempb}
+    {}%
+  \forlistloop{\blx@fakeset@resolvekeys}\blx@fakeset@tempa
+  \let\blx@fakeset@tempa\@empty
+  \forlistcsloop
+    {\blxfset@addrealkey{\blx@fakeset@tempa}}
+    {blx@dlist@centry@\the\c@refsection @\blx@refcontext@context}%
+  \global\cslet{blx@dlist@centry@\the\c@refsection @\blx@refcontext@context}%
+    \blx@fakeset@tempa
+  \iftoggle{blx@sortsets}
+    {\ifcsundef{blx@fakeset@plist@\the\c@refsection}
+       {}
+       {\forlistcsloop
+          {\blx@fakeset@sortrelatedfield}
+          {blx@fakeset@plist@\the\c@refsection}}}
+    {}%
+}%
+\makeatother
+
+\DeclareSortingTemplate{bytitle}{
+\sort{
+		\field{sorttitle}
+		\field{title}
+}
+}
+
+%\DeclareRefcontext{rcbytitle}{sorting=bytitle}
+
+
+\DefineBibliographyExtras{english}{%
+  % d-m-y format for long dates
+  \protected\def\mkbibdatelong#1#2#3{%
+    \iffieldundef{#3}
+      {}
+      {\stripzeros{\thefield{#3}}%
+       \iffieldundef{#2}{}{\nobreakspace}}%
+    \iffieldundef{#2}
+      {}
+      {\mkbibmonth{\thefield{#2}}%
+       \iffieldundef{#1}{}{\space}}%
+    \iffieldbibstring{#1}{\bibstring{\thefield{#1}}}{\stripzeros{\thefield{#1}}}}%
+  % d-m-y format for short dates
+  \protected\def\mkbibdateshort#1#2#3{%
+    \iffieldundef{#3}
+      {}
+      {\mkdatezeros{\thefield{#3}}%
+       \iffieldundef{#2}{}{/}}%
+    \iffieldundef{#2}
+      {}
+      {\mkdatezeros{\thefield{#2}}%
+       \iffieldundef{#1}{}{/}}%
+    \iffieldbibstring{#1}{\bibstring{\thefield{#1}}}{\mkdatezeros{\thefield{#1}}}}%
+}
+
+
+
+
+%\DeclareBibliographyAlias{newspaper}{article}
+
+
+\DefineBibliographyExtras{english}{%
+  % d-m-y format for long dates
+  \protected\def\mkbibdatelong#1#2#3{%
+    \iffieldundef{#3}
+      {}
+      {\stripzeros{\thefield{#3}}%
+       \iffieldundef{#2}{}{\nobreakspace}}%
+    \iffieldundef{#2}
+      {}
+      {\mkbibmonth{\thefield{#2}}%
+       \iffieldundef{#1}{}{\space}}%
+    \iffieldbibstring{#1}{\bibstring{\thefield{#1}}}{\stripzeros{\thefield{#1}}}}%
+  % d-m-y format for short dates
+  \protected\def\mkbibdateshort#1#2#3{%
+    \iffieldundef{#3}
+      {}
+      {\mkdatezeros{\thefield{#3}}%
+       \iffieldundef{#2}{}{/}}%
+    \iffieldundef{#2}
+      {}
+      {\mkdatezeros{\thefield{#2}}%
+       \iffieldundef{#1}{}{/}}%
+    \iffieldbibstring{#1}{\bibstring{\thefield{#1}}}{\mkdatezeros{\thefield{#1}}}}%
+}
+
+
+
+
+%\DeclareBibliographyAlias{newspaper}{article}
+
+
+
+%
+%\newcommand\examplekey{amamv}
+%\newcommand\docite[2]{{\sffamily\bfseries#1}: text\textcolor{red}{\csname #1\endcsname{#2}} text}
+%\newcommand\dociteexample[1]{\docite{#1}{\examplekey}}
+
+
+\newcommand\printbibliographymagazines{%
+\begin{refcontext}{rcbytitle}
+\printbibliography[type=periodical,
+title=Magazines,
+keyword=mv,
+heading=subbibliography]
+\end{refcontext}
+\begin{refcontext}{rcnyt}
+\printbibliography[type=article,
+title=Articles,
+keyword=mv,
+heading=subbibliography]
+\end{refcontext}
+}

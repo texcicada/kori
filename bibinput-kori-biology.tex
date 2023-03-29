@@ -1,0 +1,498 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\ExplSyntaxOn
+
+
+\NewDocumentCommand { \getinitial } { m } {
+
+	\tl_set:Nx \l_tmpa_tl { #1 }
+%	\tl_show:N \l_tmpa_tl
+	\str_head:N \l_tmpa_tl 
+	
+}
+
+
+\ExplSyntaxOff
+
+
+
+
+\DeclareNameAlias{commonname}{family-given/given-family}
+
+
+\DeclareBibliographyDriver{biology}{%
+	\usebibmacro{begentry}
+      \usebibmacro{getbinom:genus}\space%
+      \usebibmacro{getbinom:species}%
+      \newunit\adddot\space
+      \usebibmacro{getbinom:family}%
+      \newunit\adddot\space
+      \usebibmacro{getbinom:order}%
+      \ifnameundef{commonname}{}{%
+      \newunit\adddot\space
+      \usebibmacro{getbinom:commonname}%
+      \iffieldundef{genus}{%
+      	\iftoggle{koribiousedash}{%
+      			\nopunct%
+      			}% no dot
+      			{%
+      			}% dot
+			}% put dot
+			{%
+			      \nopunct%
+			}%
+      }%
+%		\newunit\space
+	\usebibmacro{finentry}
+}
+
+
+
+
+\DeclareSortingTemplate{biologysort}{
+\sort{
+	\field{genus}
+%	\field{commonname}
+	}
+\sort{
+	\field{species}
+%	\field{commonname}
+	}
+\sort{
+	\field{family}
+%	\field{commonname}
+	}
+\sort{
+	\field{order}
+%	\field{commonname}
+	}
+\sort{
+	\field{commonname}
+	}
+}
+
+
+
+
+\DeclareSortingTemplate{biologysortclassgenus}{
+\sort{
+	\field{class}
+%	\field{commonname}
+	}
+\sort{
+	\field{genus}
+%	\field{commonname}
+	}
+\sort{
+	\field{species}
+%	\field{commonname}
+	}
+%\sort{
+%	\field{family}
+%	}
+%\sort{
+%	\field{order}
+%	}
+\sort{
+	\field{commonname}
+	}
+}
+
+
+
+
+
+
+%\newcounter{photonum}
+%\setcounter{photonum}{0}
+%\newcommand\incrphotonum{\refstepcounter{photonum}}
+
+
+
+%~~~~~~~~~~~~~~~~~~~
+% fieldformats: biology
+\DeclareFieldFormat{class}{\mkbibbold{#1}}
+\DeclareFieldFormat{order}{\textsc{#1}}
+\DeclareFieldFormat{family}{#1}
+\DeclareFieldFormat{genus}{\mkbibemph{#1}}
+\DeclareFieldFormat{species}{\mkbibemph{#1}}
+%%commonname}{#1}
+
+%%\DeclareNameFormat{photographer}{#1}
+%\DeclareNameFormat{photographer}{%
+%\ifthenelse{\value{listcount}=1}
+%{\namepartfamily%
+%\ifdefvoid{\namepartgiven}{}{\addcomma\space\namepartgiven}}
+%{\ifdefvoid{\namepartgiven}{}{\namepartgiven\space}%
+%\namepartfamily}%
+%\ifthenelse{\value{listcount}<\value{liststop}}
+%{\addcomma\space}
+%{}}
+
+\DeclareNameFormat{commonname}{%
+\ifdefvoid{\namepartgiven}{}{\namepartgiven\space}%
+\namepartfamily%
+\ifthenelse{\value{listcount}<\value{liststop}}
+{\addcomma\space}
+{}}
+
+
+\DeclareNameFormat{commonnamea}{%
+\ifthenelse{\value{listcount}=1}
+{%
+\ifdefvoid{\namepartgiven}{}{\namepartgiven\space}%
+\namepartfamily%
+}%
+{}}
+\DeclareNameFormat{commonnameb}{%
+\ifthenelse{\value{listcount}=2}
+{%
+\ifdefvoid{\namepartgiven}{}{\namepartgiven\space}%
+\namepartfamily%
+}%
+{}}
+\DeclareNameFormat{commonnamec}{%
+\ifthenelse{\value{listcount}=3}
+{%
+\ifdefvoid{\namepartgiven}{}{\namepartgiven\space}%
+\namepartfamily%
+}%
+{}}
+
+
+
+
+%~~~~~~~~~~~~~~~~~~~
+% bibmacros
+%======================= biology
+
+\newbibmacro{getbinom:commonname}{%
+      \ifnameundef{commonname}{}{%
+      \ifcitation{\printnames{commonname}}%
+		{%
+      \iffieldundef{genus}{%
+			\iftoggle{koribiousedash}{%
+      	\addspace%
+      	\printtext[parens]{\printnames{commonname}}%
+      	}%
+      	{%
+      	\printnames{commonname}
+      	}%
+      }%
+      {%
+      	\addspace%
+      	\printtext[parens]{\printnames{commonname}}%
+      }%
+%      \addspace\newunit\printtext{ }%
+      }}%
+}
+
+\newbibmacro{getbinom:commonnamea}{%
+      \ifnameundef{commonname}{}{%
+      \printnames[commonnamea]{commonname}%
+      }%
+}
+
+\newbibmacro{getbinom:commonnameb}{%
+      \ifnameundef{commonname}{}{%
+      \printnames[commonnameb]{commonname}%
+      }%
+}
+\newbibmacro{getbinom:commonnamec}{%
+      \ifnameundef{commonname}{}{%
+      \printnames[commonnamec]{commonname}%
+      }%
+}
+
+
+
+\newbibmacro{getbinom:unknown}{%
+		\iftoggle{koribiousedash}%
+		{%
+      \printtext{\bibstring{notknown}}%
+      }%
+      { \nopunct }%
+}
+
+\newbibmacro{getbinom:class}{%
+      \iffieldundef{class}{\usebibmacro{getbinom:unknown}}{\printfield{class}}%
+}
+
+\newbibmacro{getbinom:order}{%
+      \iffieldundef{order}{\usebibmacro{getbinom:unknown}}{\printfield{order}}%
+}
+%      \usebibmacro{getbinom:order}%
+\newbibmacro{getbinom:family}{%
+      \iffieldundef{family}{\usebibmacro{getbinom:unknown}}{\printfield{family}}%
+}
+      
+\newbibmacro{getbinom:genus:initial}{%
+      \printtext[emph]{\getinitial{\thefield{genus}}}%
+}
+\newbibmacro{getbinom:genus}{%
+      \iffieldundef{genus}{\usebibmacro{getbinom:unknown}}{\printfield{genus}}%
+}
+\newbibmacro{getbinom:species}{%
+      \iffieldundef{species}{\usebibmacro{getbinom:unknown}}{\printfield{species}}%
+}
+
+\newbibmacro{getbinom}{%
+      \ifciteseen%
+      {\usebibmacro{getbinom:genus:initial}\adddot\space}%
+      {\usebibmacro{getbinom:genus}\space}%
+x      \usebibmacro{getbinom:species}%
+}
+
+%%%======================= photographer
+%%\newbibmacro{getphotographer}{%
+%%	\ifnameundef{photographer}{}{\printnames{photographer}}%
+%%}
+
+%%%%======================= photoby
+%%%\newbibmacro{photoby}{%
+%%%   \iffieldundef{photoname}{}{\usebibmacro{getphotoname}}%
+%%%   \ifcitation{%
+%%%	\ifnameundef{photographer}{}{\addspace\mkbibparens{\usebibmacro{getphotographer}}}%
+%%%	}%
+%%%	{%
+%%%\ifnameundef{photographer}{}{\addcomma\addspace\bibstring{photoby}\addspace\usebibmacro{getphotographer}\isdot}%
+%%%	}%
+%%%}
+%%%
+%%%
+%%%
+%%%%%======================= photoby-caption
+%%%%\newbibmacro{photoby-caption}{%
+%%%%   \iffieldundef{photoname}{}{\usebibmacro{getphotoname}}%
+%%%%	\ifnameundef{photographer}{}{\addspace\mkbibparens{\usebibmacro{getphotographer}}}%
+%%%%}
+%%%%
+%%%%
+%%%%%======================= photoby-bib
+%%%%\newbibmacro{photoby-bib}{%
+%%%%   \iffieldundef{photoname}{}{\usebibmacro{getphotoname}}%
+%%%%	\ifnameundef{photographer}{}{\addcomma\addspace\bibstring{photoby}\addspace\usebibmacro{getphotographer}\isdot}%
+%%%%}
+%%%%
+%%%
+%%%\newbibmacro{photo-count}{%
+%%%\incrphotonum\mkbibbrackets{\thephotonum}
+%%%}
+
+%~~~~~~~~~~~~~~~~~~~
+% citecommands
+%======================= biology
+\DeclareCiteCommand{biology}%
+%@@@@@@@@@@@@@@@@ prenote
+{%
+	\usebibmacro{prenote}%
+}% 
+%@@@@@@@@@@@@@@@@ item
+{%
+\ifentrytype{biology}%
+{%biology ==================================
+      \ifciteseen%
+      {\usebibmacro{getbinom:genus:initial}\adddot\space}%
+      {\usebibmacro{getbinom:genus}\space}%
+      \usebibmacro{getbinom:species}%
+}{}%
+}%
+%@@@@@@@@@@@@@@@@ delim
+{}%
+%@@@@@@@@@@@@@@@@ postnote
+{%
+	\usebibmacro{postnote}% 
+}
+
+%======================= biocommon
+\DeclareCiteCommand{biocommon}%
+%@@@@@@@@@@@@@@@@ prenote
+{%
+	\usebibmacro{prenote}%
+}% 
+%@@@@@@@@@@@@@@@@ item
+{%
+%%\ifentrytype{biology}%
+%%{%biology ==================================
+%%      \ifciteseen%
+%%      {\usebibmacro{getbinom:genus:initial}\adddot\space}%
+%%      {\usebibmacro{getbinom:genus}\space}%
+      \usebibmacro{getbinom:commonname}%
+%%}{}%
+}%
+%@@@@@@@@@@@@@@@@ delim
+{}%
+%@@@@@@@@@@@@@@@@ postnote
+{%
+	\usebibmacro{postnote}% 
+}
+
+
+%======================= biocommona
+\DeclareCiteCommand{biocommona}{\usebibmacro{prenote}}% 
+{\usebibmacro{getbinom:commonnamea}}%
+{}%
+{\usebibmacro{postnote}}
+
+%======================= biocommonb
+\DeclareCiteCommand{biocommonb}{\usebibmacro{prenote}}% 
+{\usebibmacro{getbinom:commonnameb}}%
+{}%
+{\usebibmacro{postnote}}
+
+%======================= biocommonc
+\DeclareCiteCommand{biocommonc}{\usebibmacro{prenote}}% 
+{\usebibmacro{getbinom:commonnamec}}%
+{}%
+{\usebibmacro{postnote}}
+
+
+
+
+
+
+%======================= biospecies
+\DeclareCiteCommand{biospecies}%
+%@@@@@@@@@@@@@@@@ prenote
+{%
+	\usebibmacro{prenote}%
+}% 
+%@@@@@@@@@@@@@@@@ item
+{%
+      \usebibmacro{getbinom:species}%
+}%
+%@@@@@@@@@@@@@@@@ delim
+{}%
+%@@@@@@@@@@@@@@@@ postnote
+{%
+	\usebibmacro{postnote}% 
+}
+
+
+%======================= biogenus
+\DeclareCiteCommand{biogenus}%
+%@@@@@@@@@@@@@@@@ prenote
+{%
+	\usebibmacro{prenote}%
+}% 
+%@@@@@@@@@@@@@@@@ item
+{%
+      \usebibmacro{getbinom:genus}%
+}%
+%@@@@@@@@@@@@@@@@ delim
+{}%
+%@@@@@@@@@@@@@@@@ postnote
+{%
+	\usebibmacro{postnote}% 
+}
+
+
+%======================= biofamily
+\DeclareCiteCommand{biofamily}%
+%@@@@@@@@@@@@@@@@ prenote
+{%
+	\usebibmacro{prenote}%
+}% 
+%@@@@@@@@@@@@@@@@ item
+{%
+      \usebibmacro{getbinom:family}%
+}%
+%@@@@@@@@@@@@@@@@ delim
+{}%
+%@@@@@@@@@@@@@@@@ postnote
+{%
+	\usebibmacro{postnote}% 
+}
+
+
+%======================= bioorder
+\DeclareCiteCommand{bioorder}%
+%@@@@@@@@@@@@@@@@ prenote
+{%
+	\usebibmacro{prenote}%
+}% 
+%@@@@@@@@@@@@@@@@ item
+{%
+      \usebibmacro{getbinom:order}%
+}%
+%@@@@@@@@@@@@@@@@ delim
+{}%
+%@@@@@@@@@@@@@@@@ postnote
+{%
+	\usebibmacro{postnote}% 
+}
+
+
+%======================= bioclass
+\DeclareCiteCommand{bioclass}%
+%@@@@@@@@@@@@@@@@ prenote
+{%
+	\usebibmacro{prenote}%
+}% 
+%@@@@@@@@@@@@@@@@ item
+{%
+      \usebibmacro{getbinom:class}%
+}%
+%@@@@@@@@@@@@@@@@ delim
+{}%
+%@@@@@@@@@@@@@@@@ postnote
+{%
+	\usebibmacro{postnote}% 
+}
+
+
+%======================= biogenspec
+\DeclareCiteCommand{biogenspec}%
+%@@@@@@@@@@@@@@@@ prenote
+{%
+	\usebibmacro{prenote}%
+}% 
+%@@@@@@@@@@@@@@@@ item
+{%
+	\printtext{%
+      \usebibmacro{getbinom:genus}%
+      \addspace%
+      \usebibmacro{getbinom:species}%
+      }%
+}%
+%@@@@@@@@@@@@@@@@ delim
+{}%
+%@@@@@@@@@@@@@@@@ postnote
+{%
+	\usebibmacro{postnote}% 
+}
+
+
+
+
+
+
+
+
+
+
+\NewBibliographyString{notknown}
+\DefineBibliographyStrings{english}{%
+    notknown = {\textemdash},
+}
+%%%
+%%%
+
+\defbibnote{biologybibnote}{List of species mentioned}
+
+
+
+\newcommand\printbibliographybiology{%
+%%%\setcounter{photonum}{0}
+\begin{refcontext}{rcbiologysort}
+\printbibliography[type=biology,
+	title={Biology},
+	prenote=biologybibnote,
+	]
+\end{refcontext}
+}
+%%%
+\DeclareRefcontext{rcbiologysort}{sorting=biologysort}
+%%%

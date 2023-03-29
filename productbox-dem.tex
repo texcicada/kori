@@ -1,0 +1,108 @@
+\documentclass{article}
+\usepackage{productbox}
+\usepackage[calc]{picture}
+\usepackage{psvectorian}
+
+%\input insbox
+\usepackage{graphicx}
+\usepackage{fontspec}
+%\setmainfont{xxx}
+\usepackage{xcolor}
+
+
+
+%============================================
+%%
+\begin{document}
+
+
+
+
+\begin{ProductBox}
+\begin{FrontFace}[bottom color=white!80!blue!90!yellow,top color=white]
+\vspace{3em}
+{\centering
+
+\rule{0.72\textwidth}{0.5pt}\vspace{1ex}
+
+{
+{\Huge Product Box\textsuperscript{\tiny *}}
+}
+\vspace{1ex}
+\rule{0.72\textwidth}{0.5pt}
+
+\Large \color{blue}
+The BOX
+
+that
+
+{\large \textit{`straight-out-of-the-box'}}
+
+\textcolor{black}{\textsc{Solutions}}
+
+come out of in.
+
+\rule{0.42\textwidth}{0.5pt}
+
+***
+
+\footnotesize
+v0.4a
+
+}
+
+\vspace{2em}\small
+
+\setlength{\unitlength}{1pt}
+
+ \begin{picture}(\widthof{Hello World}, 10mm)
+ \put(0, 0){\makebox(0,0)[lb]{Hello World}}%
+ \put(0, \heightof{Hello World} + \fboxsep){%
+ \line(1, 0){\widthof{Hello World}}%
+ }%
+ \put(\widthof{Hello World}, 10mm){%
+ \line(0, -1){10mm}%
+ }%
+ \end{picture}\psvectorian[opacity=0.72]{144}
+\hfill {\tiny\textsuperscript{*}}Package \texttt{productbox}
+\end{FrontFace}
+\begin{BackFace}[top color=yellow!30!red,bottom color=white]
+\large Back Face
+\end{BackFace}
+\begin{TopFace}[outer color=white!30!red,inner color=white]
+{\centering
+
+\large --- OPEN HERE ---
+
+}
+\end{TopFace}
+\begin{BottomFace}[outer color=red,inner color=black]
+\large Bottom Face
+\end{BottomFace}
+\begin{LeftFace}[left color=green!20,right color=yellow!80]
+{\large Instructions\\for\\use}:
+
+\flushleft\small
+Apply liberally with copy-and-paste.
+
+Stand well clear.
+
+For use in ventilated spaces.
+
+\vspace{2em}
+ \hfil \psvectorian[opacity=0.72]{120}\hss
+
+\medskip
+\noindent\hfil\ \fcolorbox{brown}{white}{{\ttfamily 12315965476-/8}}\hfill\ 
+
+\end{LeftFace}
+\begin{RightFace}[left color=white,right color=black]
+\large Right Face
+\end{RightFace}
+\end{ProductBox}
+
+
+
+
+\end{document}
+

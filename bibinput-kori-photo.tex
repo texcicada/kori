@@ -1,0 +1,149 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\defbibnote{abibnote}{Plain bibliography}
+\defbibnote{photobibnote}{List of photos}
+
+\DeclareNameAlias{photographer}{family-given/given-family}
+
+
+\DeclareBibliographyDriver{photo}{%
+	\usebibmacro{begentry}
+	\usebibmacro{photo-count}\addspace\usebibmacro{photoby}
+	\newunit\addcolon\addspace%
+%	\printtext{\thefield{entrykey}\csname x\thefield{entrykey}\endcsname}%
+	\ifcsundef{x\strfield{entrykey}}{undef}%
+	{\printtext{\csname x\strfield{entrykey}\endcsname}}%	
+	\usebibmacro{finentry}
+}
+
+
+
+
+\DeclareSortingTemplate{photosort}{
+\sort{
+	\field{photographer}
+	}
+\sort{
+	\field{photoname}
+	}
+}
+
+
+
+\newcounter{photonum}
+\setcounter{photonum}{0}
+\newcommand\incrphotonum{\refstepcounter{photonum}}
+
+
+
+%~~~~~~~~~~~~~~~~~~~
+% fieldformats: photo
+\DeclareFieldFormat{photoname}{\mkbibquote{#1}}
+%%\DeclareNameFormat{photographer}{#1}
+%\DeclareNameFormat{photographer}{%
+%\ifthenelse{\value{listcount}=1}
+%{\namepartfamily%
+%\ifdefvoid{\namepartgiven}{}{\addcomma\space\namepartgiven}}
+%{\ifdefvoid{\namepartgiven}{}{\namepartgiven\space}%
+%\namepartfamily}%
+%\ifthenelse{\value{listcount}<\value{liststop}}
+%{\addcomma\space}
+%{}}
+
+\DeclareNameFormat{photographer}{%
+\ifdefvoid{\namepartgiven}{}{\namepartgiven\space}%
+\namepartfamily%
+\ifthenelse{\value{listcount}<\value{liststop}}
+{\addcomma\space}
+{}}
+
+
+
+%~~~~~~~~~~~~~~~~~~~
+% bibmacros
+%======================= photoname
+\newbibmacro{getphotoname}{%
+      \iffieldundef{photoname}{}{\printfield{photoname}}%
+}
+
+%======================= photographer
+\newbibmacro{getphotographer}{%
+	\ifnameundef{photographer}{}{\printnames{photographer}}%
+}
+
+%======================= photoby
+\newbibmacro{photoby}{%
+   \iffieldundef{photoname}{}{\usebibmacro{getphotoname}}%
+   \ifcitation{%
+	\ifnameundef{photographer}{}{\addspace\mkbibparens{\usebibmacro{getphotographer}}}%
+	}%
+	{%
+\ifnameundef{photographer}{}{\addcomma\addspace\bibstring{photoby}\addspace\usebibmacro{getphotographer}\isdot}%
+	}%
+}
+
+
+
+%%======================= photoby-caption
+%\newbibmacro{photoby-caption}{%
+%   \iffieldundef{photoname}{}{\usebibmacro{getphotoname}}%
+%	\ifnameundef{photographer}{}{\addspace\mkbibparens{\usebibmacro{getphotographer}}}%
+%}
+%
+%
+%%======================= photoby-bib
+%\newbibmacro{photoby-bib}{%
+%   \iffieldundef{photoname}{}{\usebibmacro{getphotoname}}%
+%	\ifnameundef{photographer}{}{\addcomma\addspace\bibstring{photoby}\addspace\usebibmacro{getphotographer}\isdot}%
+%}
+%
+
+\newbibmacro{photo-count}{%
+\incrphotonum\mkbibbrackets{\thephotonum}
+}
+
+%~~~~~~~~~~~~~~~~~~~
+% citecommands
+%======================= photocite
+\DeclareCiteCommand{photocite}%
+%@@@@@@@@@@@@@@@@ prenote
+{%
+	\usebibmacro{prenote}%
+}% 
+%@@@@@@@@@@@@@@@@ item
+{%
+\ifentrytype{photo}%
+{%photo ==================================
+	\usebibmacro{photo-count}\addspace\usebibmacro{photoby}%
+%	\global\expandafter\newcommand\csname x\strfield{entrykey}\endcsname{\thepage}%
+	\csxdef{x\strfield{entrykey}}{\thepage}%%	x{\csname x\thefield{entrykey}\endcsname}x%
+}{}%
+}%
+%@@@@@@@@@@@@@@@@ delim
+{}%
+%@@@@@@@@@@@@@@@@ postnote
+{%
+	\usebibmacro{postnote}% 
+}
+
+
+\NewBibliographyString{photoby}
+\DefineBibliographyStrings{english}{%
+    photoby = {photo by},
+}
+
+\newcommand\bibtitlephoto{}
+\newcommand\bibtitlephotodefault{Photos}
+\renewcommand\bibtitlephoto{\bibtitlephotodefault}
+
+\newcommand\printbibliographyphoto{%
+\setcounter{photonum}{0}
+\begin{refcontext}{rcphotosort}
+\printbibliography[type=photo,
+	title={\bibtitlephoto},
+	prenote=photobibnote,
+	]
+\end{refcontext}
+}
+
+\DeclareRefcontext{rcphotosort}{sorting=none}
+

@@ -1,0 +1,553 @@
+%============  bibliography commands
+
+
+
+%\newcommand\showcmnd[1]{%
+%\textbackslash\texttt{#1}%
+%}
+
+
+\newcommand\bibhlcoloursyllabus{red}
+\newcommand\bibhlformatsyllabus[1]{\sffamily\bfseries\textcolor{\bibhlcoloursyllabus}{#1}}
+
+
+\newtoggle{littleendiansyllabus}
+\toggletrue{littleendiansyllabus}
+
+
+\DeclareFieldFormat[syllabus]{level1}{#1}
+\DeclareFieldFormat[syllabus]{level2}{%
+    \ifboolexpr{
+    test {\ifbibliography}
+    and
+     test {\iffieldundef{level1}}
+     }
+	{{\bibhlformatsyllabus{#1}}}% T
+	{#1}% F
+}%
+
+\DeclareFieldFormat[syllabus]{level3}{%
+    \ifboolexpr{
+    test {\ifbibliography}
+    and
+     test {\iffieldundef{level2}}
+     }
+	{{\bibhlformatsyllabus{#1}}}% T
+	{#1}% F
+}%
+
+\DeclareFieldFormat[syllabus]{level4}{%
+    \ifboolexpr{
+    test {\ifbibliography}
+    and
+     test {\iffieldundef{level3}}
+     }
+	{{\bibhlformatsyllabus{#1}}}% T
+	{#1}% F
+}%
+
+\DeclareFieldFormat[syllabus]{level5}{%
+    \ifboolexpr{
+    test {\ifbibliography}
+    and
+     test {\iffieldundef{level4}}
+     }
+	{{\bibhlformatsyllabus{#1}}}% T
+	{#1}% F
+}%
+
+\DeclareFieldFormat[syllabus]{level6}{%
+    \ifboolexpr{
+    test {\ifbibliography}
+    and
+     test {\iffieldundef{level5}}
+     }
+	{{\bibhlformatsyllabus{#1}}}% T
+	{#1}% F
+}
+
+\DeclareFieldFormat[syllabus]{level7}{%
+    \ifboolexpr{
+    test {\ifbibliography}
+    and
+     test {\iffieldundef{level6}}
+     }
+	{{\bibhlformatsyllabus{#1}}}% T
+	{#1}% F
+}
+
+
+
+
+\DeclareFieldFormat[syllabus]{level8}{%
+    \ifboolexpr{
+    test {\ifbibliography}
+    and
+     test {\iffieldundef{level7}}
+     }
+	{{\bibhlformatsyllabus{#1}}}% T
+	{#1}% F
+}%
+
+\DeclareFieldFormat[syllabus]{level9}{%
+    \ifboolexpr{
+    test {\ifbibliography}
+    and
+     test {\iffieldundef{level8}}
+     }
+	{{\bibhlformatsyllabus{#1}}}% T
+	{#1}% F
+}%
+
+\DeclareFieldFormat[syllabus]{level10}{%
+    \ifboolexpr{
+    test {\ifbibliography}
+    and
+     test {\iffieldundef{level9}}
+     }
+	{{\bibhlformatsyllabus{#1}}}% T
+	{#1}% F
+}%
+
+\DeclareFieldFormat[syllabus]{level11}{%
+    \ifboolexpr{
+    test {\ifbibliography}
+    and
+     test {\iffieldundef{level10}}
+     }
+	{{\bibhlformatsyllabus{#1}}}% T
+	{#1}% F
+}%
+
+\DeclareFieldFormat[syllabus]{level12}{#1}
+
+\DeclareFieldFormat[syllabus]{shortsyllabus}{\mkbibemph{#1}}
+\DeclareFieldFormat[syllabus]{itemattr1}{#1}
+\DeclareFieldFormat[syllabus]{itemattr2}{#1}
+\DeclareFieldFormat[syllabus]{itemattr3}{#1}
+
+\DeclareFieldFormat[syllabus]{quoteditparens}{%
+\printtext[parens]{\mkbibquote{\mkbibemph{#1}}}%
+}
+
+\DeclareFieldFormat[syllabus]{emph}{\mkbibemph{#1}}
+
+
+
+
+%~~~~~~~~~~~~~~~~~~~
+% bibmacros
+%======================= getshortsyllabus
+\newbibmacro{getshortsyllabus}{%
+		\iffieldundef{shortsyllabus}{}{\printfield{shortsyllabus}}%
+}
+
+\newcommand\relateditemdelimsyllabus{\setunit*{\addcomma\addspace}}%
+
+%======================= getsyllabusall
+\newbibmacro{getsyllabusall}{%
+      \usebibmacro{getsyllabus1}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getsyllabus2}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getsyllabus3}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getsyllabus4}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getsyllabus5}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getsyllabus6}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getsyllabus7}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getsyllabus8}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getsyllabus9}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getsyllabus10}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getsyllabus11}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getsyllabus12}%
+}
+
+
+%======================= getitemattrsyllabusall
+\newbibmacro{getitemattrsyllabusall}{%
+      \usebibmacro{getitemattrsyllabus1}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getitemattrsyllabus2}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getitemattrsyllabus3}%
+}
+
+
+%======================= getsyllabus
+\newbibmacro{getsyllabus}{%
+		\newunit%
+		\iftoggle{littleendiansyllabus}%
+		{\usebibmacro{getitemattrsyllabusall}}{\usebibmacro{getsyllabusall}}%
+		\newunit%
+		\setunit*{\addcolon\addspace}%
+		\iftoggle{littleendiansyllabus}%
+		{\usebibmacro{getsyllabusall}}{\usebibmacro{getitemattrsyllabusall}}%
+		\newunit%
+}
+
+	
+%======================= getsyllabusgeneral
+\newbibmacro{getsyllabusgeneral}[1]{%
+		\iffieldundef{level#1}{}{\printfield{level#1}}%
+}
+
+%======================= getitemattrsyllabusgeneral
+\newbibmacro{getitemattrsyllabusgeneral}[1]{%
+		\iffieldundef{itemattr#1}{}{\printfield{itemattr#1}}%
+}
+
+
+%======================= getsyllabus1-12
+\newbibmacro{getsyllabus1}{\usebibmacro{getsyllabusgeneral}{1}}
+\newbibmacro{getsyllabus2}{\usebibmacro{getsyllabusgeneral}{2}}
+\newbibmacro{getsyllabus3}{\usebibmacro{getsyllabusgeneral}{3}}
+\newbibmacro{getsyllabus4}{\usebibmacro{getsyllabusgeneral}{4}}
+\newbibmacro{getsyllabus5}{\usebibmacro{getsyllabusgeneral}{5}}
+\newbibmacro{getsyllabus6}{\usebibmacro{getsyllabusgeneral}{6}}
+\newbibmacro{getsyllabus7}{\usebibmacro{getsyllabusgeneral}{7}}
+\newbibmacro{getsyllabus8}{\usebibmacro{getsyllabusgeneral}{8}}
+\newbibmacro{getsyllabus9}{\usebibmacro{getsyllabusgeneral}{9}}
+\newbibmacro{getsyllabus10}{\usebibmacro{getsyllabusgeneral}{10}}
+\newbibmacro{getsyllabus11}{\usebibmacro{getsyllabusgeneral}{11}}
+\newbibmacro{getsyllabus12}{\usebibmacro{getsyllabusgeneral}{12}}
+
+%======================= getitemattrsyllabus1-3
+\newbibmacro{getitemattrsyllabus1}{\usebibmacro{getitemattrsyllabusgeneral}{1}}
+\newbibmacro{getitemattrsyllabus2}{\usebibmacro{getitemattrsyllabusgeneral}{2}}
+\newbibmacro{getitemattrsyllabus3}{\usebibmacro{getitemattrsyllabusgeneral}{3}}
+
+
+%++++++++++++++++++++++++++++++++++++++ reverse
+%======================= getsyllabusallrev
+\newbibmacro{getsyllabusallrev}{%
+      \usebibmacro{getsyllabus12}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getsyllabus11}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getsyllabus10}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getsyllabus9}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getsyllabus8}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getsyllabus7}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getsyllabus6}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getsyllabus5}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getsyllabus4}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getsyllabus3}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getsyllabus2}%
+		\relateditemdelimsyllabus%
+      \usebibmacro{getsyllabus1}%
+}
+
+%======================= getsyllabusallreva
+\newbibmacro{getsyllabusallreva}{%
+      \newunit%
+		\iftoggle{littleendiansyllabus}{\addcolon}{}%
+      \usebibmacro{getsyllabusallrev}%
+}
+
+
+
+
+%======================= getsyllabusrev
+\newbibmacro{getsyllabusrev}{%
+		\newunit%
+		\iftoggle{littleendiansyllabus}
+		{\usebibmacro{getitemattrsyllabusall}}{\usebibmacro{getsyllabusallreva}}%
+		\newunit%
+		\setunit*{\addcolon\addspace}%
+		\iftoggle{littleendiansyllabus}
+		{\usebibmacro{getsyllabusallreva}}{\usebibmacro{getitemattrsyllabusall}}%
+		\newunit%
+}
+
+	
+
+
+
+
+
+
+\newbibmacro*{related:syllabus}[1]{%
+  \entrydata*{#1}{%
+  {%
+		\togglefalse{littleendiansyllabus}%
+	\printtext{--}%
+	\nopunct%
+	\usebibmacro{getsyllabus}%
+	\usebibmacro{qshorthandintro}%
+	\setunit*{\addperiod}\printtext{\enspace}%
+     }%
+}}
+
+
+%===
+\DeclareCiteCommand{\syllabus}
+{   % prenote
+    \usebibmacro{prenote}%
+}
+{%loopcode
+	\ifciteseen
+	{%
+		\iffieldundef{getshortsyllabus}{\usebibmacro{uqshorthandintro}}%
+		{\usebibmacro{getshortsyllabus}}%
+	}%
+	{\usebibmacro{getsyllabus}%
+	\usebibmacro{qshorthandintro}}%
+}
+{   %sepcode
+    \multicitedelim%
+}
+{%postnote
+\usebibmacro{postnote}%
+}
+
+
+
+%-----------------------------------------
+\DeclareCiteCommand{\syllabusrev}
+{   % prenote
+    \usebibmacro{prenote}%
+}
+{%loopcode
+	\ifciteseen
+	{%
+		\usebibmacro{getshortsyllabus}%
+	}%
+	{\usebibmacro{getsyllabusrev}}%
+}
+{   %sepcode
+    \multicitedelim%
+}
+{%postnote
+\usebibmacro{postnote}%
+}
+
+
+%-----------------------------------------
+\DeclareCiteCommand{\parensyllabus}[\mkbibparens]{% prenote
+    \usebibmacro{prenote}%
+}
+{%loopcode
+	\ifciteseen
+	{%
+		\usebibmacro{getshortsyllabus}%
+	}%
+	{\usebibmacro{getsyllabus}}%
+}
+{%sepcode
+    \multicitedelim%
+}
+{%postnote
+\usebibmacro{postnote}%
+}
+
+
+
+%-----------------------------------------
+\DeclareCiteCommand{\bracketsyllabus}[\mkbibbrackets]{% prenote
+    \usebibmacro{prenote}%
+}
+{%loopcode
+	\ifciteseen
+	{%
+		\usebibmacro{getshortsyllabus}%
+	}%
+	{\usebibmacro{getsyllabus}}%
+}
+{%sepcode
+    \multicitedelim%
+}
+{%postnote
+\usebibmacro{postnote}%
+}
+
+
+
+%-----------------------------------------
+\DeclareCiteCommand{\footsyllabus}[\mkbibfootnote]{% prenote
+    \usebibmacro{prenote}%
+}
+{%loopcode
+	\usebibmacro{getsyllabus}%
+}
+{   %sepcode
+    \multicitedelim%
+}
+{%postnote
+\usebibmacro{postnote}%
+}
+
+
+
+%-----------------------------------------
+\DeclareMultiCiteCommand{\syllabuss}%
+{\syllabus}{\multicitedelim}
+\DeclareMultiCiteCommand{\parensyllabuss}[\mkbibparens]%
+{\parensyllabus}{\multicitedelim}
+\DeclareMultiCiteCommand{\footsyllabuss}[\mkbibfootnote]%
+{\footsyllabus}{\multicitedelim}
+
+
+
+%-----------------------------------------
+\DeclareCiteCommand{\syllabusa}{\usebibmacro{prenote}}{\usebibmacro{getsyllabus1}}{\multicitedelim}{\usebibmacro{postnote}}
+\DeclareCiteCommand{\syllabusb}{\usebibmacro{prenote}}{\usebibmacro{getsyllabus2}}{\multicitedelim}{\usebibmacro{postnote}}
+\DeclareCiteCommand{\syllabusc}{\usebibmacro{prenote}}{\usebibmacro{getsyllabus3}}{\multicitedelim}{\usebibmacro{postnote}}
+\DeclareCiteCommand{\syllabusd}{\usebibmacro{prenote}}{\usebibmacro{getsyllabus4}}{\multicitedelim}{\usebibmacro{postnote}}
+\DeclareCiteCommand{\syllabuse}{\usebibmacro{prenote}}{\usebibmacro{getsyllabus5}}{\multicitedelim}{\usebibmacro{postnote}}
+\DeclareCiteCommand{\syllabusf}{\usebibmacro{prenote}}{\usebibmacro{getsyllabus6}}{\multicitedelim}{\usebibmacro{postnote}}
+\DeclareCiteCommand{\syllabusg}{\usebibmacro{prenote}}{\usebibmacro{getsyllabus7}}{\multicitedelim}{\usebibmacro{postnote}}
+\DeclareCiteCommand{\syllabush}{\usebibmacro{prenote}}{\usebibmacro{getsyllabus8}}{\multicitedelim}{\usebibmacro{postnote}}
+\DeclareCiteCommand{\syllabusi}{\usebibmacro{prenote}}{\usebibmacro{getsyllabus9}}{\multicitedelim}{\usebibmacro{postnote}}
+\DeclareCiteCommand{\syllabusj}{\usebibmacro{prenote}}{\usebibmacro{getsyllabus10}}{\multicitedelim}{\usebibmacro{postnote}}
+\DeclareCiteCommand{\syllabusk}{\usebibmacro{prenote}}{\usebibmacro{getsyllabus11}}{\multicitedelim}{\usebibmacro{postnote}}
+\DeclareCiteCommand{\syllabusl}{\usebibmacro{prenote}}{\usebibmacro{getsyllabus12}}{\multicitedelim}{\usebibmacro{postnote}}
+
+
+
+
+
+%-----------------------------------------
+\newbibmacro*{qshorthandintro}{% quoted shorthand
+  \iffieldundef{shorthandintro}
+    {\iffieldundef{shorthand}
+       {}
+       {\setunit{\addspace}%
+        \printtext[parens]{%
+          \bibstring{citedas}\space
+          \printfield{shorthand}}}}
+    {\setunit{\addspace}%
+     \printfield[quoteditparens]{shorthandintro}}}
+
+
+
+%-----------------------------------------
+\newbibmacro*{uqshorthandintro}{% unquoted shorthand
+  \iffieldundef{shorthandintro}
+    {\iffieldundef{shorthand}
+       {}
+       {\setunit{\addspace}%
+        \printtext[parens]{%
+          \bibstring{citedas}\space
+          \printfield{shorthand}}}}
+    {\setunit{\addspace}%
+     \printfield[emph]{shorthandintro}}}
+
+
+
+
+
+%-----------------------------------------
+\DeclareBibliographyDriver{syllabus}{%
+    \usebibmacro{begentry}%
+    \iffieldundef{title}{}{\printfield{title}}%
+	\usebibmacro{getsyllabus}%
+\iftoggle{bbx:related}{%
+\setunit*{\addperiod}\printtext{\enspace}
+\newline\usebibmacro{related:init}\usebibmacro{related}%
+\printtext{\newline}% after last related item
+  }%
+  {}%
+    \usebibmacro{finentry}%
+}
+
+
+\DeclareSortingTemplate{bytitle}{
+\sort{
+		\field{sorttitle}
+		\field{title}
+		\field{itemattr1}
+}
+\sort{
+		\field{itemattr2}
+}
+\sort{
+		\field{itemattr3}
+}
+}
+
+\DeclareRefcontext{rcbytitlesyllabus}{sorting=bytitle}
+
+
+
+%-----------------------------------------
+\DeclareCiteCommand{\syllabusitem}
+{   % prenote
+    \usebibmacro{prenote}%
+}
+{%loopcode
+		\usebibmacro{getitemattrsyllabusall}%
+}
+{   %sepcode
+    \multicitedelim%
+}
+{%postnote
+\usebibmacro{postnote}%
+}
+
+
+
+%-----------------------------------------
+\DeclareCiteCommand{\syllabusloc}
+{   % prenote
+    \usebibmacro{prenote}%
+}
+{%loopcode
+		\usebibmacro{getsyllabusall}%
+}
+{   %sepcode
+    \multicitedelim%
+}
+{%postnote
+\usebibmacro{postnote}%
+}
+
+
+%-----------------------------------------
+\DeclareCiteCommand{\syllabuslocrev}
+{   % prenote
+    \usebibmacro{prenote}%
+}
+{%loopcode
+		\usebibmacro{getsyllabusallrev}%
+}
+{   %sepcode
+    \multicitedelim%
+}
+{%postnote
+\usebibmacro{postnote}%
+}
+
+
+%============  bib overrides
+
+
+\renewcommand\bibhlformatsyllabus[1]{\itshape#1}
+\DeclareFieldFormat[syllabus]{title}{\mkbibbold{#1}}
+\DeclareFieldFormat[syllabus]{level1}{}
+\DeclareFieldFormat[syllabus]{level2}{\ifcitation{\mkbibbold{#1}}{\bibhlformatsyllabus{#1}}}
+
+
+
+\newcommand\printbibliographysyllabus{%
+\begin{refcontext}{rcbytitlesyllabus}
+\printbibliography[title=Texts,
+type=syllabus]
+\end{refcontext}
+}

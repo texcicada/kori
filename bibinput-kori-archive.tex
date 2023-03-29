@@ -1,0 +1,500 @@
+
+%============  bibliography commands
+
+
+
+\newcommand\bibhlcolour{red}
+\newcommand\bibhlformat[1]{\sffamily\bfseries\textcolor{\bibhlcolour}{#1}}
+
+
+\newtoggle{littleendian}
+\toggletrue{littleendian}
+
+
+\DeclareFieldFormat{level1}{#1}
+\DeclareFieldFormat{level2}{%
+    \ifboolexpr{
+    test {\ifbibliography}
+    and
+     test {\iffieldundef{level1}}
+     }
+	{{\bibhlformat{#1}}}% T
+	{#1}% F
+}%
+
+\DeclareFieldFormat{level3}{%
+    \ifboolexpr{
+    test {\ifbibliography}
+    and
+     test {\iffieldundef{level2}}
+     }
+	{{\bibhlformat{#1}}}% T
+	{#1}% F
+}%
+
+\DeclareFieldFormat{level4}{%
+    \ifboolexpr{
+    test {\ifbibliography}
+    and
+     test {\iffieldundef{level3}}
+     }
+	{{\bibhlformat{#1}}}% T
+	{#1}% F
+}%
+
+\DeclareFieldFormat{level5}{%
+    \ifboolexpr{
+    test {\ifbibliography}
+    and
+     test {\iffieldundef{level4}}
+     }
+	{{\bibhlformat{#1}}}% T
+	{#1}% F
+}%
+
+\DeclareFieldFormat{level6}{%
+    \ifboolexpr{
+    test {\ifbibliography}
+    and
+     test {\iffieldundef{level5}}
+     }
+	{{\bibhlformat{#1}}}% T
+	{#1}% F
+}
+
+\DeclareFieldFormat{level7}{%
+    \ifboolexpr{
+    test {\ifbibliography}
+    and
+     test {\iffieldundef{level6}}
+     }
+	{{\bibhlformat{#1}}}% T
+	{#1}% F
+}
+
+
+
+
+\DeclareFieldFormat{level8}{%
+    \ifboolexpr{
+    test {\ifbibliography}
+    and
+     test {\iffieldundef{level7}}
+     }
+	{{\bibhlformat{#1}}}% T
+	{#1}% F
+}%
+
+\DeclareFieldFormat{level9}{%
+    \ifboolexpr{
+    test {\ifbibliography}
+    and
+     test {\iffieldundef{level8}}
+     }
+	{{\bibhlformat{#1}}}% T
+	{#1}% F
+}%
+
+\DeclareFieldFormat{level10}{%
+    \ifboolexpr{
+    test {\ifbibliography}
+    and
+     test {\iffieldundef{level9}}
+     }
+	{{\bibhlformat{#1}}}% T
+	{#1}% F
+}%
+
+\DeclareFieldFormat{level11}{%
+    \ifboolexpr{
+    test {\ifbibliography}
+    and
+     test {\iffieldundef{level10}}
+     }
+	{{\bibhlformat{#1}}}% T
+	{#1}% F
+}%
+
+\DeclareFieldFormat{level12}{#1}
+
+\DeclareFieldFormat{shortarchive}{\mkbibemph{#1}}
+\DeclareFieldFormat{itemattr1}{#1}
+\DeclareFieldFormat{itemattr2}{#1}
+\DeclareFieldFormat{itemattr3}{#1}
+
+%~~~~~~~~~~~~~~~~~~~
+% bibmacros
+%======================= getshortarchive
+\newbibmacro{getshortarchive}{%
+		\iffieldundef{shortarchive}{}{\printfield{shortarchive}}%
+}
+
+\newcommand\relateditemdelim{\setunit*{\addcomma\addspace}}%
+
+%======================= getarchiveall
+\newbibmacro{getarchiveall}{%
+      \usebibmacro{getarchive1}%
+		\relateditemdelim%
+      \usebibmacro{getarchive2}%
+		\relateditemdelim%
+      \usebibmacro{getarchive3}%
+		\relateditemdelim%
+      \usebibmacro{getarchive4}%
+		\relateditemdelim%
+      \usebibmacro{getarchive5}%
+		\relateditemdelim%
+      \usebibmacro{getarchive6}%
+		\relateditemdelim%
+      \usebibmacro{getarchive7}%
+		\relateditemdelim%
+      \usebibmacro{getarchive8}%
+		\relateditemdelim%
+      \usebibmacro{getarchive9}%
+		\relateditemdelim%
+      \usebibmacro{getarchive10}%
+		\relateditemdelim%
+      \usebibmacro{getarchive11}%
+		\relateditemdelim%
+      \usebibmacro{getarchive12}%
+}
+
+
+%======================= getitemattrall
+\newbibmacro{getitemattrall}{%
+      \usebibmacro{getitemattr1}%
+		\relateditemdelim%
+      \usebibmacro{getitemattr2}%
+		\relateditemdelim%
+      \usebibmacro{getitemattr3}%
+}
+
+
+%======================= getarchive
+\newbibmacro{getarchive}{%
+		\newunit%
+		\iftoggle{littleendian}%
+		{\usebibmacro{getitemattrall}}{\usebibmacro{getarchiveall}}%
+		\newunit%
+		\setunit*{\addcolon\addspace}%
+		\iftoggle{littleendian}%
+		{\usebibmacro{getarchiveall}}{\usebibmacro{getitemattrall}}%
+		\newunit%
+}
+
+	
+%======================= getarchivegeneral
+\newbibmacro{getarchivegeneral}[1]{%
+		\iffieldundef{level#1}{}{\printfield{level#1}}%
+}
+
+%======================= getitemattrgeneral
+\newbibmacro{getitemattrgeneral}[1]{%
+		\iffieldundef{itemattr#1}{}{\printfield{itemattr#1}}%
+}
+
+
+%======================= getarchive1-12
+\newbibmacro{getarchive1}{\usebibmacro{getarchivegeneral}{1}}
+\newbibmacro{getarchive2}{\usebibmacro{getarchivegeneral}{2}}
+\newbibmacro{getarchive3}{\usebibmacro{getarchivegeneral}{3}}
+\newbibmacro{getarchive4}{\usebibmacro{getarchivegeneral}{4}}
+\newbibmacro{getarchive5}{\usebibmacro{getarchivegeneral}{5}}
+\newbibmacro{getarchive6}{\usebibmacro{getarchivegeneral}{6}}
+\newbibmacro{getarchive7}{\usebibmacro{getarchivegeneral}{7}}
+\newbibmacro{getarchive8}{\usebibmacro{getarchivegeneral}{8}}
+\newbibmacro{getarchive9}{\usebibmacro{getarchivegeneral}{9}}
+\newbibmacro{getarchive10}{\usebibmacro{getarchivegeneral}{10}}
+\newbibmacro{getarchive11}{\usebibmacro{getarchivegeneral}{11}}
+\newbibmacro{getarchive12}{\usebibmacro{getarchivegeneral}{12}}
+
+%======================= getitemattr1-3
+\newbibmacro{getitemattr1}{\usebibmacro{getitemattrgeneral}{1}}
+\newbibmacro{getitemattr2}{\usebibmacro{getitemattrgeneral}{2}}
+\newbibmacro{getitemattr3}{\usebibmacro{getitemattrgeneral}{3}}
+
+
+%++++++++++++++++++++++++++++++++++++++ reverse
+%======================= getarchiveallrev
+\newbibmacro{getarchiveallrev}{%
+      \usebibmacro{getarchive12}%
+		\relateditemdelim%
+      \usebibmacro{getarchive11}%
+		\relateditemdelim%
+      \usebibmacro{getarchive10}%
+		\relateditemdelim%
+      \usebibmacro{getarchive9}%
+		\relateditemdelim%
+      \usebibmacro{getarchive8}%
+		\relateditemdelim%
+      \usebibmacro{getarchive7}%
+		\relateditemdelim%
+      \usebibmacro{getarchive6}%
+		\relateditemdelim%
+      \usebibmacro{getarchive5}%
+		\relateditemdelim%
+      \usebibmacro{getarchive4}%
+		\relateditemdelim%
+      \usebibmacro{getarchive3}%
+		\relateditemdelim%
+      \usebibmacro{getarchive2}%
+		\relateditemdelim%
+      \usebibmacro{getarchive1}%
+}
+
+%======================= getarchiveallreva
+\newbibmacro{getarchiveallreva}{%
+      \newunit%
+		\iftoggle{littleendian}{\addcolon}{}%
+      \usebibmacro{getarchiveallrev}%
+}
+
+
+
+
+%======================= getarchiverev
+\newbibmacro{getarchiverev}{%
+		\newunit%
+		\iftoggle{littleendian}
+		{\usebibmacro{getitemattrall}}{\usebibmacro{getarchiveallreva}}%
+		\newunit%
+		\setunit*{\addcolon\addspace}%
+		\iftoggle{littleendian}
+		{\usebibmacro{getarchiveallreva}}{\usebibmacro{getitemattrall}}%
+		\newunit%
+}
+
+	
+
+
+
+
+
+
+\newbibmacro*{related:archive}[1]{%
+  \entrydata*{#1}{%
+  {%
+		\togglefalse{littleendian}%
+	\printtext{--}%
+	\nopunct%
+	\usebibmacro{getarchive}
+     }%
+}}
+
+
+%===
+\DeclareCiteCommand{\archive}
+{   % prenote
+    \usebibmacro{prenote}%
+}
+{%loopcode
+	\ifciteseen
+	{%
+		\usebibmacro{getshortarchive}%
+	}%
+	{\usebibmacro{getarchive}}%
+}
+{   %sepcode
+    \multicitedelim%
+}
+{%postnote
+\usebibmacro{postnote}%
+}
+
+
+
+%-----------------------------------------
+\DeclareCiteCommand{\archiverev}
+{   % prenote
+    \usebibmacro{prenote}%
+}
+{%loopcode
+	\ifciteseen
+	{%
+		\usebibmacro{getshortarchive}%
+	}%
+	{\usebibmacro{getarchiverev}}%
+}
+{   %sepcode
+    \multicitedelim%
+}
+{%postnote
+\usebibmacro{postnote}%
+}
+
+
+%-----------------------------------------
+\DeclareCiteCommand{\parenarchive}[\mkbibparens]{% prenote
+    \usebibmacro{prenote}%
+}
+{%loopcode
+	\ifciteseen
+	{%
+		\usebibmacro{getshortarchive}%
+	}%
+	{\usebibmacro{getarchive}}%
+}
+{%sepcode
+    \multicitedelim%
+}
+{%postnote
+\usebibmacro{postnote}%
+}
+
+
+
+%-----------------------------------------
+\DeclareCiteCommand{\bracketarchive}[\mkbibbrackets]{% prenote
+    \usebibmacro{prenote}%
+}
+{%loopcode
+	\ifciteseen
+	{%
+		\usebibmacro{getshortarchive}%
+	}%
+	{\usebibmacro{getarchive}}%
+}
+{%sepcode
+    \multicitedelim%
+}
+{%postnote
+\usebibmacro{postnote}%
+}
+
+
+
+%-----------------------------------------
+\DeclareCiteCommand{\footarchive}[\mkbibfootnote]{% prenote
+    \usebibmacro{prenote}%
+}
+{%loopcode
+	\usebibmacro{getarchive}%
+}
+{   %sepcode
+    \multicitedelim%
+}
+{%postnote
+\usebibmacro{postnote}%
+}
+
+
+
+%-----------------------------------------
+\DeclareMultiCiteCommand{\archives}%
+{\archive}{\multicitedelim}
+\DeclareMultiCiteCommand{\parenarchives}[\mkbibparens]%
+{\parenarchive}{\multicitedelim}
+\DeclareMultiCiteCommand{\footarchives}[\mkbibfootnote]%
+{\footarchive}{\multicitedelim}
+
+
+
+%-----------------------------------------
+\DeclareCiteCommand{\archivea}{\usebibmacro{prenote}}{\usebibmacro{getarchive1}}{\multicitedelim}{\usebibmacro{postnote}}
+\DeclareCiteCommand{\archiveb}{\usebibmacro{prenote}}{\usebibmacro{getarchive2}}{\multicitedelim}{\usebibmacro{postnote}}
+\DeclareCiteCommand{\archivec}{\usebibmacro{prenote}}{\usebibmacro{getarchive3}}{\multicitedelim}{\usebibmacro{postnote}}
+\DeclareCiteCommand{\archived}{\usebibmacro{prenote}}{\usebibmacro{getarchive4}}{\multicitedelim}{\usebibmacro{postnote}}
+\DeclareCiteCommand{\archivee}{\usebibmacro{prenote}}{\usebibmacro{getarchive5}}{\multicitedelim}{\usebibmacro{postnote}}
+\DeclareCiteCommand{\archivef}{\usebibmacro{prenote}}{\usebibmacro{getarchive6}}{\multicitedelim}{\usebibmacro{postnote}}
+\DeclareCiteCommand{\archiveg}{\usebibmacro{prenote}}{\usebibmacro{getarchive7}}{\multicitedelim}{\usebibmacro{postnote}}
+\DeclareCiteCommand{\archiveh}{\usebibmacro{prenote}}{\usebibmacro{getarchive8}}{\multicitedelim}{\usebibmacro{postnote}}
+\DeclareCiteCommand{\archivei}{\usebibmacro{prenote}}{\usebibmacro{getarchive9}}{\multicitedelim}{\usebibmacro{postnote}}
+\DeclareCiteCommand{\archivej}{\usebibmacro{prenote}}{\usebibmacro{getarchive10}}{\multicitedelim}{\usebibmacro{postnote}}
+\DeclareCiteCommand{\archivek}{\usebibmacro{prenote}}{\usebibmacro{getarchive11}}{\multicitedelim}{\usebibmacro{postnote}}
+\DeclareCiteCommand{\archivel}{\usebibmacro{prenote}}{\usebibmacro{getarchive12}}{\multicitedelim}{\usebibmacro{postnote}}
+
+
+
+
+%-----------------------------------------
+\DeclareBibliographyDriver{archive}{%
+    \usebibmacro{begentry}%
+    \iffieldundef{title}{}{\printfield{title}}%
+	\usebibmacro{getarchive}%
+\iftoggle{bbx:related}{%
+\setunit*{\addperiod}\printtext{\enspace}
+\newline\usebibmacro{related:init}\usebibmacro{related}%
+  }%
+  {}%
+    \usebibmacro{finentry}%
+}
+
+
+\DeclareSortingTemplate{bytitle}{
+\sort{
+		\field{sorttitle}
+		\field{title}
+		\field{itemattr1}
+}
+\sort{
+		\field{itemattr2}
+}
+\sort{
+		\field{itemattr3}
+}
+}
+
+\DeclareRefcontext{rcbytitle}{sorting=bytitle}
+
+
+
+%-----------------------------------------
+\DeclareCiteCommand{\archiveitem}
+{   % prenote
+    \usebibmacro{prenote}%
+}
+{%loopcode
+		\usebibmacro{getitemattrall}%
+}
+{   %sepcode
+    \multicitedelim%
+}
+{%postnote
+\usebibmacro{postnote}%
+}
+
+
+
+%-----------------------------------------
+\DeclareCiteCommand{\archiveloc}
+{   % prenote
+    \usebibmacro{prenote}%
+}
+{%loopcode
+		\usebibmacro{getarchiveall}%
+}
+{   %sepcode
+    \multicitedelim%
+}
+{%postnote
+\usebibmacro{postnote}%
+}
+
+
+%-----------------------------------------
+\DeclareCiteCommand{\archivelocrev}
+{   % prenote
+    \usebibmacro{prenote}%
+}
+{%loopcode
+		\usebibmacro{getarchiveallrev}%
+}
+{   %sepcode
+    \multicitedelim%
+}
+{%postnote
+\usebibmacro{postnote}%
+}
+
+
+
+\newcommand\bibtitlearchive{}
+\newcommand\bibtitlearchivedefault{Archives}
+\renewcommand\bibtitlearchive{\bibtitlearchivedefault}
+
+
+\newcommand\printbibliographyarchive{%
+\begin{refcontext}{rcbytitle}
+\printbibliography[type=archive,
+title=\bibtitlearchive]
+\end{refcontext}
+}

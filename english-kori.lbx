@@ -1,0 +1,23 @@
+  \ProvidesFile{english-bibdm_combo.lbx}[2019/03/28 english with additions for TV series, book series, artworks]
+  \InheritBibliographyExtras{english}
+  \NewBibliographyString{series, episode, as, director,  writer, producer, numseasons, numepisodes, episodelength, by, epby, fulltitle, illustrator}
+  \DeclareBibliographyStrings{%
+    inherit   = {english},
+    series     = {{series}{series}},
+    episode     = {{episode}{ep}},
+    as     = {{as}{as}},
+    director  = {{director}{dir}},
+    writer    = {{writer}{written by}},
+    producer    = {{producer}{produced by}},
+    numseasons = {{seasons}{x}},
+    numepisodes = {{episodes}{ep}},
+    episodelength = {{min}{min}},
+    epby = {{of}{$\times$}},
+    by    = {{by}{by}},
+     fulltitle = {{full title}{full title}},
+     illustrator = {{illustration by}{illus}},
+%    directedby  = {{directed by}{directed by}},
+%    writtenby    = {{written by}{written by}},
+%    producedby    = {{produced by}{produced bys}},
+%	    series     = {{series}{series}},
+  }
